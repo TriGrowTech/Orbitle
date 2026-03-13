@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@400;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    @apply text-ink bg-white overflow-x-hidden;
+  }
+}
+
+@layer utilities {
+  .animate-blink {
+    animation: blink 2s infinite;
+  }
+  .animate-float {
+    animation: floatY 5s ease-in-out infinite;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.3; }
+  }
+  @keyframes floatY {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-8px); }
+  }
+  @keyframes reveal {
+    from { filter: blur(5px); opacity: 0.4; }
+    to   { filter: none;      opacity: 1;   }
+  }
+  .animate-reveal {
+    animation: reveal 0.5s ease both;
+  }
+  .blur-plans {
+    filter: blur(5px);
+    user-select: none;
+    pointer-events: none;
+  }
+  .tabular { font-variant-numeric: tabular-nums; }
+}
