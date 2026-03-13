@@ -97,47 +97,54 @@ export const translations = {
     // MODULES
     modules: {
       kicker: 'The Platform',
-      h2a: 'Four modules. One domain.',
-      h2b: 'Zero setup on your end.',
-      sub: 'Every operator gets all four — pre-configured, connected, and live on their branded domain within 48 hours.',
+      h2a: 'Four Powerful Systems.',
+      h2b: 'One Simple Platform.',
+      sub: 'Run your entire travel business on your own domain — without building software.',
+      valueKicker: 'The Value Proposition',
+      valueStatement: "For less than the cost of a single lead, you're getting an entire travel business infrastructure.",
+      infrastructureMessage: "You're not buying software. You're getting a complete travel business infrastructure.",
+      security: {
+        title: 'Your Leads Stay Yours',
+        desc: 'Orbitle does not access or sell operator leads. Your data belongs only to you. Agents only see the leads you assign. All enquiries flow directly into your admin panel.',
+      },
       cards: [
         {
           icon: '🏪',
           title: 'Travel Marketplace',
-          desc: 'Your public-facing marketplace at your domain. Agents publish packages for customers — every enquiry lands in your admin panel automatically.',
+          desc: 'A branded travel marketplace on your domain. List packages and collect enquiries directly.',
           points: [
-            'Agents publish packages directly to your marketplace',
-            'Customer enquiries auto-route to your admin panel',
-            'Your brand, your domain — not a third-party site',
+            'Agents publish packages directly on your marketplace',
+            'Customer enquiries automatically reach your admin dashboard',
+            'Your brand and domain — not a third-party platform',
           ],
         },
         {
           icon: '⚙️',
           title: 'Admin Panel',
-          desc: 'Your command center. Add agents, sell leads at your set price, monitor every deal, and track revenue — all from one dashboard.',
+          desc: 'Your command center for managing leads, agents, and revenue.',
           points: [
-            'Sell leads to agents at your own price per lead',
-            'Track every lead from purchase to booking',
-            'Revenue and agent performance at a glance',
+            'Assign and sell leads to agents at your own price',
+            'Track every lead from enquiry to booking',
+            'Monitor agent performance and revenue in one dashboard',
           ],
         },
         {
           icon: '🧑‍💼',
           title: 'Agent Portal',
-          desc: 'Each agent gets their own secure login — only their purchased leads, only their packages. Simple enough to use from day one. No training needed.',
+          desc: 'A dedicated workspace for your agents. Simple, secure, and built for high-speed lead closing.',
           points: [
-            'Private workspace — only their leads and packages',
-            'Update lead status visible to admin in real time',
-            'Simpler than WhatsApp — adopted immediately',
+            'Each agent has their own secure login',
+            'Agents only see leads assigned to them',
+            'Update lead status in real time',
           ],
         },
         {
           icon: '🔗',
           title: 'Agent Subdomains',
-          desc: 'Every agent gets their own branded page — sara.yourbrand.com — the moment you add them. They share it anywhere, driving organic traffic to your marketplace.',
+          desc: 'Every agent gets their own mini-website — sara.yourbrand.com — the moment you add them.',
           points: [
-            'Auto-created instantly when you add an agent',
-            'Agents share on Instagram, WhatsApp, Google — driving organic traffic to your marketplace',
+            'Automatically created when you add an agent',
+            'Agents share their page on WhatsApp, Instagram, Google',
             'All enquiries route back to your admin panel',
           ],
         },
@@ -334,8 +341,8 @@ export const translations = {
       bizPlaceholder: 'Sunrise Travel',
       domainLabel: 'Domain Name (if any)',
       domainPlaceholder: 'sunrisetravel.com',
-      agentsLabel: 'Number of Agents',
-      agentsOptions: ['Select team size', 'Just me (starting out)', '2–10 agents', '11–30 agents', '30+ agents'],
+      agentsLabel: 'Team Size',
+      agentsOptions: ['Select team size', '1–5 agents', '5–10 agents', '10–20 agents', '20–50 agents', '50+ agents'],
       msgLabel: 'Anything to add?',
       msgPlaceholder: 'Tell us about your current setup or what you\'re trying to solve...',
       submitBtn: 'Submit & Unlock Pricing →',
@@ -448,47 +455,54 @@ export const translations = {
 
     modules: {
       kicker: 'प्लेटफ़ॉर्म',
-      h2a: 'चार मॉड्यूल। एक डोमेन।',
-      h2b: 'आपकी तरफ से ज़ीरो सेटअप।',
-      sub: 'हर ऑपरेटर को चारों मॉड्यूल मिलते हैं — प्री-कॉन्फ़िगर्ड, कनेक्टेड और 48 घंटों में लाइव।',
+      h2a: 'चार पावरफुल सिस्टम।',
+      h2b: 'एक आसान प्लेटफ़ॉर्म।',
+      sub: 'बिना सॉफ्टवेयर बनाए अपना पूरा ट्रैवल बिज़नेस अपने डोमेन पर चलाएं।',
+      valueKicker: 'वैल्यू प्रपोज़िशन',
+      valueStatement: "एक सिंगल लीड की कीमत से भी कम में, आपको पूरा ट्रैवल बिज़नेस इंफ्रास्ट्रक्चर मिल रहा है।",
+      infrastructureMessage: "आप सिर्फ सॉफ्टवेयर नहीं खरीद रहे। आप एक पूरा ट्रैवल बिज़नेस इंफ्रास्ट्रक्चर पा रहे हैं।",
+      security: {
+        title: 'आपके लीड्स हमेशा आपके रहेंगे',
+        desc: 'Orbitle ऑपरेटर्स के लीड्स को न तो एक्सेस करता है और न ही बेचता है। आपका डेटा सिर्फ आपका है। एजेंट्स सिर्फ वही लीड्स देख सकते हैं जो आप उन्हें सौंपते हैं।',
+      },
       cards: [
         {
           icon: '🏪',
           title: 'ट्रैवल मार्केटप्लेस',
-          desc: 'आपके डोमेन पर पब्लिक मार्केटप्लेस। एजेंट पैकेज पब्लिश करते हैं — हर एनक्वायरी सीधे आपके एडमिन पैनल में आती है।',
+          desc: 'आपके डोमेन पर एक ब्रांडेड ट्रैवल मार्केटप्लेस। पैकेज सूचीबद्ध करें और सीधे पूछताछ प्राप्त करें।',
           points: [
             'एजेंट सीधे आपके मार्केटप्लेस पर पैकेज पब्लिश करते हैं',
-            'ग्राहकों की एनक्वायरी आपके एडमिन पैनल में ऑटो-रूट होती है',
-            'आपका ब्रांड, आपका डोमेन — किसी थर्ड-पार्टी साइट पर नहीं',
+            'ग्राहकों की एनक्वायरी ऑटोमैटिक आपके एडमिन डैशबोर्ड तक पहुंचती है',
+            'आपका ब्रांड, आपका डोमेन — किसी थर्ड-पार्टी प्लेटफ़ॉर्म पर नहीं',
           ],
         },
         {
           icon: '⚙️',
           title: 'एडमिन पैनल',
-          desc: 'आपका कंट्रोल सेंटर। एजेंट जोड़ें, अपनी कीमत पर लीड बेचें, हर डील ट्रैक करें और रेवेन्यू देखें।',
+          desc: 'लीड्स, एजेंट्स और रेवेन्यू मैनेज करने के लिए आपका कंट्रोल सेंटर।',
           points: [
-            'एजेंट्स को अपनी मर्ज़ी की कीमत पर लीड बेचें',
-            'हर लीड को खरीद से बुकिंग तक ट्रैक करें',
-            'रेवेन्यू और एजेंट परफॉर्मेंस एक नज़र में',
+            'एजेंट्स को अपनी मर्ज़ी की कीमत पर लीड असाइन करें और बेचें',
+            'एनक्वायरी से बुकिंग तक हर लीड को ट्रैक करें',
+            'एक ही डैशबोर्ड में एजेंट परफॉर्मेंस और रेवेन्यू देखें',
           ],
         },
         {
           icon: '🧑‍💼',
           title: 'एजेंट पोर्टल',
-          desc: 'हर एजेंट को अपना सिक्योर लॉगिन मिलता है — सिर्फ उनके खरीदे लीड्स और पैकेज। पहले दिन से इस्तेमाल करने लायक। कोई ट्रेनिंग नहीं चाहिए।',
+          desc: 'आपके एजेंट्स के लिए एक डेडिकेटेड वर्कस्पेस। सुरक्षित और तेज़ लीड क्लोजिंग के लिए बनाया गया।',
           points: [
-            'प्राइवेट वर्कस्पेस — सिर्फ उनके लीड्स और पैकेज',
-            'लीड स्टेटस अपडेट रीयल-टाइम में एडमिन को दिखता है',
-            'WhatsApp से भी आसान — तुरंत अपना लिया जाता है',
+            'हर एजेंट का अपना सुरक्षित लॉगिन होता है',
+            'एजेंट्स सिर्फ उन्हें सौंपे गए लीड्स ही देख सकते हैं',
+            'रीयल टाइम में लीड स्टेटस अपडेट करें',
           ],
         },
         {
           icon: '🔗',
           title: 'एजेंट सबडोमेन',
-          desc: 'जैसे ही आप एजेंट जोड़ते हैं, उनका ब्रांडेड पेज — sara.yourbrand.com — तुरंत लाइव हो जाता है। वो इसे कहीं भी शेयर करें, ट्रैफिक आपके मार्केटप्लेस पर आता है।',
+          desc: 'हर एजेंट को अपना मिनी-वेबसाइट मिलता है — sara.yourbrand.com — जैसे ही आप उन्हें जोड़ते हैं।',
           points: [
-            'एजेंट जोड़ते ही ऑटोमैटिक बन जाता है',
-            'एजेंट Instagram, WhatsApp, Google पर शेयर करें — ऑर्गेनिक ट्रैफिक आपके मार्केटप्लेस पर',
+            'एजेंट जोड़ने पर तुरंत ऑटोमैटिक बन जाता है',
+            'एजेंट अपना पेज WhatsApp, Instagram, Google पर शेयर करें',
             'सभी एनक्वायरी आपके एडमिन पैनल में वापस आती हैं',
           ],
         },
@@ -680,8 +694,8 @@ export const translations = {
       bizPlaceholder: 'Sunrise Travel',
       domainLabel: 'डोमेन नाम (अगर है)',
       domainPlaceholder: 'sunrisetravel.com',
-      agentsLabel: 'एजेंट्स की संख्या',
-      agentsOptions: ['टीम साइज़ चुनें', 'सिर्फ मैं (शुरुआत)', '2–10 एजेंट', '11–30 एजेंट', '30+ एजेंट'],
+      agentsLabel: 'टीम साइज़',
+      agentsOptions: ['टीम साइज़ चुनें', '1–5 एजेंट', '5–10 एजेंट', '10–20 एजेंट', '20–50 एजेंट', '50+ एजेंट'],
       msgLabel: 'कुछ और बताना है?',
       msgPlaceholder: 'अपना मौजूदा सेटअप या समस्या बताएं...',
       submitBtn: 'सबमिट करें और प्राइसिंग अनलॉक करें →',
@@ -706,3 +720,10 @@ export const translations = {
 } as const
 
 export type Translations = typeof translations.en
+
+// Helper to make the type values strings rather than literals
+type DeepStringify<T> = {
+  [K in keyof T]: T[K] extends object ? DeepStringify<T[K]> : string
+}
+
+export type SafeTranslations = DeepStringify<Translations>

@@ -1,17 +1,16 @@
 'use client'
+// Orbitle — Premium SaaS Landing Page
 import { useState, useEffect } from 'react'
-import TopBar from '@/components/TopBar'
-import Nav from '@/components/Nav'
-import Hero from '@/components/Hero'
-import UrgencyStrip from '@/components/UrgencyStrip'
-import HowItWorks from '@/components/HowItWorks'
-import Modules from '@/components/Modules'
-import WhyOrbitle from '@/components/WhyOrbitle'
-import LogoStrip from '@/components/LogoStrip'
-import WaitlistComments from '@/components/WaitlistComments'
-import Pricing from '@/components/Pricing'
-import Contact from '@/components/Contact'
-import Footer from '@/components/Footer'
+import TopBar from '@/components/TopBarNew'
+import Nav from '@/components/NavNew'
+import Hero from '@/components/HeroNew'
+import HowItWorks from '@/components/HowItWorksNew'
+import Modules from '@/components/ModulesNew'
+import WhyOrbitle from '@/components/WhyOrbitleNew'
+import Testimonials from '@/components/TestimonialsNew'
+import Pricing from '@/components/PricingNew'
+import Contact from '@/components/ContactNew'
+import Footer from '@/components/FooterNew'
 
 export default function Home() {
   const [slots, setSlots] = useState(47)
@@ -39,12 +38,10 @@ export default function Home() {
       <Nav />
       <main>
         <Hero />
-        <UrgencyStrip slots={slots} />
         <HowItWorks />
         <Modules />
         <WhyOrbitle />
-        <LogoStrip />
-        <WaitlistComments />
+        <Testimonials />
         <Pricing unlocked={pricingUnlocked} />
         <Contact slots={slots} onSuccess={handleFormSuccess} />
       </main>
