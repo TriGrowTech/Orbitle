@@ -20,23 +20,43 @@ export default function Contact({ slots, onSuccess }: ContactProps) {
     setForm(f => ({ ...f, [k]: e.target.value }))
 
   const handleSubmit = async () => {
+    // Basic Validation
     if (!form.name || !form.phone || !form.email) {
       alert(lang === 'hi' ? 'कृपया नाम, फोन और ईमेल भरें।' : 'Please fill in your name, phone, and email.')
       return
     }
+
     setLoading(true)
+
     try {
-      await fetch('/api/contact', {
+      const response = await fetch('https://api.gopalshukla.in/api/orbitle/contact', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ intent, ...form }),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          intent,
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
+          message: form.msg || `Business: ${form.biz}, Domain: ${form.domain}, Agents: ${form.agents}`
+        }),
       })
-    } catch (_) { /* graceful fallback */ }
-    setTimeout(() => {
+
+      const data = await response.json()
+
+      if (response.ok && data.success) {
+        setSuccess(true)
+        onSuccess()
+      } else {
+        alert(lang === 'hi' ? 'भेजने में विफल। कृपया पुन: प्रयास करें।' : 'Failed to send. Please try again.')
+      }
+    } catch (error) {
+      console.error("Submission Error:", error)
+      alert(lang === 'hi' ? 'सर्वर एरर। बाद में प्रयास करें।' : 'Server error. Please try again later.')
+    } finally {
       setLoading(false)
-      setSuccess(true)
-      onSuccess()
-    }, 1200)
+    }
   }
 
   const inputCls = "w-full border-[1.5px] border-gray-200 rounded-lg px-3 py-2.5 text-[14px] font-[inherit] text-ink bg-white outline-none focus:border-blue transition-colors"
@@ -47,7 +67,7 @@ export default function Contact({ slots, onSuccess }: ContactProps) {
       <div className="max-w-[1100px] mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-start">
 
-          {/* Left */}
+          {/* Left Content */}
           <div>
             <span className="text-[12px] font-bold text-blue uppercase tracking-[0.1em] block mb-2.5">{c.kicker}</span>
             <h2 className="font-sora text-[clamp(1.6rem,2.5vw,2.1rem)] font-extrabold tracking-tight text-ink mb-3">
@@ -55,7 +75,6 @@ export default function Contact({ slots, onSuccess }: ContactProps) {
             </h2>
             <p className="text-[15px] text-muted leading-[1.75] mb-5">{c.sub}</p>
 
-            {/* Starting price badge */}
             <div className="inline-flex items-baseline gap-1.5 bg-sky border border-sky2 rounded-lg px-4 py-2.5 mb-5">
               <span className="text-[13px] text-muted font-semibold">{c.fromLabel}</span>
               <span className="font-sora text-[26px] font-extrabold text-blue leading-none">{c.price}</span>
@@ -64,7 +83,7 @@ export default function Contact({ slots, onSuccess }: ContactProps) {
             </div>
 
             <div className="flex flex-col gap-2.5 mb-5">
-              {c.points.map((pt, i) => (
+              {c.points.map((pt: string, i: number) => (
                 <div key={i} className="flex gap-2 items-start text-[14px] text-ink2">
                   <span className="w-[18px] h-[18px] rounded-full bg-sky border-[1.5px] border-sky2 flex items-center justify-center flex-shrink-0 mt-0.5 text-[9px] font-extrabold text-blue">✓</span>
                   {pt}
@@ -85,7 +104,7 @@ export default function Contact({ slots, onSuccess }: ContactProps) {
             </div>
           </div>
 
-          {/* Right — form */}
+          {/* Right — Form Container */}
           <div className="border border-gray-200 rounded-2xl shadow-[0_8px_40px_rgba(26,58,92,0.14)] overflow-hidden">
             <div className="bg-navy text-white px-6 py-5">
               <h3 className="font-sora text-[17px] font-extrabold mb-1">{c.formTitle}</h3>
@@ -94,7 +113,7 @@ export default function Contact({ slots, onSuccess }: ContactProps) {
 
             {!success ? (
               <div className="p-[22px]">
-                {/* Intent */}
+                {/* Intent Toggle */}
                 <label className={labelCls}>{c.intentLabel}</label>
                 <div className="grid grid-cols-2 gap-2 mb-3.5">
                   {(['waitlist', 'demo'] as const).map(v => (
@@ -140,7 +159,7 @@ export default function Contact({ slots, onSuccess }: ContactProps) {
                 <div className="mt-3">
                   <label className={labelCls}>{c.agentsLabel}</label>
                   <select className={inputCls} value={form.agents} onChange={set('agents')}>
-                    {c.agentsOptions.map((o, i) => <option key={i} value={i === 0 ? '' : o}>{o}</option>)}
+                    {c.agentsOptions.map((o: string, i: number) => <option key={i} value={i === 0 ? '' : o}>{o}</option>)}
                   </select>
                 </div>
 
