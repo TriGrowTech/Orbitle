@@ -1,210 +1,194 @@
 'use client'
-import { useState, useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
-import { Button } from '@/components/ui/button'
-import { Check, Mail, Phone, Building2, MapPin, Send, Loader2, Globe, Users, ShieldCheck, Zap } from 'lucide-react'
+import { useState } from 'react'
 import { useLang } from '@/lib/LangContext'
 
-export default function ContactNew({ slots, onSuccess }: { slots: number, onSuccess: () => void }) {
-  const { t } = useLang()
+interface ContactProps {
+  slots: number
+  onSuccess: () => void
+}
+
+export default function Contact({ slots, onSuccess }: ContactProps) {
+  const { t, lang } = useLang()
   const c = t.contact
+
+  const [intent, setIntent] = useState<'waitlist' | 'demo'>('waitlist')
+  const [form, setForm] = useState({ name: '', phone: '', email: '', biz: '', domain: '', agents: '', msg: '' })
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
-  const containerRef = useRef(null)
-  const isInView = useInView(containerRef, { once: true, margin: '-100px' })
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault()
+  const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
+    setForm(f => ({ ...f, [k]: e.target.value }))
+
+  const handleSubmit = async () => {
+    // Basic Validation
+    if (!form.name || !form.phone || !form.email) {
+      alert(lang === 'hi' ? 'कृपया नाम, फोन और ईमेल भरें।' : 'Please fill in your name, phone, and email.')
+      return
+    }
+
     setLoading(true)
-    const formData = new FormData(e.target)
-    const data = Object.fromEntries(formData)
 
     try {
-      const res = await fetch('/api/contact', {
+      const response = await fetch('https://api.gopalshukla.in/api/orbitle/contact', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          intent,
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
+          message: form.msg || `Business: ${form.biz}, Domain: ${form.domain}, Agents: ${form.agents}`
+        }),
       })
-      if (res.ok) {
+
+      const data = await response.json()
+
+      if (response.ok && data.success) {
         setSuccess(true)
         onSuccess()
+      } else {
+        alert(lang === 'hi' ? 'भेजने में विफल। कृपया पुन: प्रयास करें।' : 'Failed to send. Please try again.')
       }
-    } catch (err) {
-      console.error(err)
+    } catch (error) {
+      console.error("Submission Error:", error)
+      alert(lang === 'hi' ? 'सर्वर एरर। बाद में प्रयास करें।' : 'Server error. Please try again later.')
     } finally {
       setLoading(false)
     }
   }
 
+  const inputCls = "w-full border-[1.5px] border-gray-200 rounded-lg px-3 py-2.5 text-[14px] font-[inherit] text-ink bg-white outline-none focus:border-blue transition-colors"
+  const labelCls = "block text-[12px] font-bold text-ink2 mb-1.5 uppercase tracking-[0.05em]"
+
   return (
-    <section id="contact" className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto bg-slate-50 relative overflow-hidden" ref={containerRef}>
-      {/* Background patterns */}
-      <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_top_left,_var(--tw-gradient-stops))] from-blue/5 via-transparent to-transparent pointer-events-none" />
+    <section id="contact" className="bg-white py-[72px] px-6">
+      <div className="max-w-[1100px] mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-start">
 
-      <div className="relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-          
-          {/* Left Column: Information Panel */}
+          {/* Left Content */}
           <div>
-            <motion.div 
-              initial={{ opacity: 0, y: 10 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              className="inline-flex items-center gap-2 px-3 py-1 transparent border border-blue/20 bg-blue/5 rounded-full mb-8"
-            >
-              <Zap className="w-3.5 h-3.5 text-blue" />
-              <span className="text-[12px] font-bold uppercase tracking-wider text-blue leading-none">
-                {c.kicker}
-              </span>
-            </motion.div>
+            <span className="text-[12px] font-bold text-blue uppercase tracking-[0.1em] block mb-2.5">{c.kicker}</span>
+            <h2 className="font-sora text-[clamp(1.6rem,2.5vw,2.1rem)] font-extrabold tracking-tight text-ink mb-3">
+              {c.h2a}<br />{c.h2b}
+            </h2>
+            <p className="text-[15px] text-muted leading-[1.75] mb-5">{c.sub}</p>
 
-            <motion.h2 
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.1 }}
-              className="text-4xl lg:text-6xl font-extrabold tracking-tight text-slate-900 mb-8 leading-[1.1]"
-            >
-              Get early access <br className="hidden lg:block" /> to Orbitle
-            </motion.h2>
+            <div className="inline-flex items-baseline gap-1.5 bg-sky border border-sky2 rounded-lg px-4 py-2.5 mb-5">
+              <span className="text-[13px] text-muted font-semibold">{c.fromLabel}</span>
+              <span className="font-sora text-[26px] font-extrabold text-blue leading-none">{c.price}</span>
+              <span className="text-[13px] text-muted">{c.pm}</span>
+              <span className="text-[11px] font-bold text-blue">{c.rate}</span>
+            </div>
 
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.2 }}
-              className="text-xl text-slate-600 font-medium mb-12 leading-relaxed max-w-[500px]"
-            >
-              Stop managing your travel business on WhatsApp and spreadsheets. Get the infrastructure you deserve.
-            </motion.p>
+            <div className="flex flex-col gap-2.5 mb-5">
+              {c.points.map((pt: string, i: number) => (
+                <div key={i} className="flex gap-2 items-start text-[14px] text-ink2">
+                  <span className="w-[18px] h-[18px] rounded-full bg-sky border-[1.5px] border-sky2 flex items-center justify-center flex-shrink-0 mt-0.5 text-[9px] font-extrabold text-blue">✓</span>
+                  {pt}
+                </div>
+              ))}
+            </div>
 
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.3 }}
-              className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-12"
-            >
-              <div className="flex items-start gap-4">
-                <div className="p-2 rounded-lg bg-blue text-white shadow-lg shadow-blue/20">
-                  <ShieldCheck className="w-5 h-5" />
-                </div>
-                <div>
-                  <h4 className="font-bold text-slate-900 mb-1">Founding Discount</h4>
-                  <p className="text-sm text-slate-500 font-medium">Locked in permanently on submission.</p>
-                </div>
+            <div className="bg-sky border border-sky2 rounded-2xl p-4 mb-4">
+              <div className="text-[14px] font-bold text-navy mb-1">
+                ⏳ {c.urgencyOnly} <span className="text-blue">{slots}</span> {c.urgencyTitle}
               </div>
-              <div className="flex items-start gap-4">
-                <div className="p-2 rounded-lg bg-blue text-white shadow-lg shadow-blue/20">
-                  <Zap className="w-5 h-5" />
-                </div>
-                <div>
-                  <h4 className="font-bold text-slate-900 mb-1">1-Week Free Trial</h4>
-                  <p className="text-sm text-slate-500 font-medium">Explore the full platform, zero risk.</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="p-2 rounded-lg bg-blue text-white shadow-lg shadow-blue/20">
-                  <Globe className="w-5 h-5" />
-                </div>
-                <div>
-                  <h4 className="font-bold text-slate-900 mb-1">Live in 48 Hours</h4>
-                  <p className="text-sm text-slate-500 font-medium">Full setup on your domain, fast.</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="p-2 rounded-lg bg-blue text-white shadow-lg shadow-blue/20">
-                  <Users className="w-5 h-5" />
-                </div>
-                <div>
-                  <h4 className="font-bold text-slate-900 mb-1">Sell Leads</h4>
-                  <p className="text-sm text-slate-500 font-medium">Manage agents and track pricing.</p>
-                </div>
-              </div>
-            </motion.div>
+              <div className="text-[13px] text-muted">{c.urgencySub}</div>
+            </div>
 
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={isInView ? { opacity: 1 } : {}}
-              transition={{ delay: 0.5 }}
-              className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center gap-6"
-            >
-              <div className="flex -space-x-3">
-                {[1,2,3,4].map(i => (
-                  <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-slate-100 overflow-hidden">
-                    <img src={`https://i.pravatar.cc/100?u=${i}`} alt="user" className="w-full h-full object-cover" />
-                  </div>
-                ))}
-              </div>
-              <p className="text-sm font-bold text-slate-600">Join <span className="text-slate-900">40+ travel operators</span> on the waitlist</p>
-            </motion.div>
+            <div className="text-[14px] text-muted flex items-center gap-2">
+              <span>📞</span>
+              <span>{c.phone} <a href="tel:+919876543210" className="text-blue font-bold hover:underline">+91 98765 43210</a></span>
+            </div>
           </div>
 
-          {/* Right Column: Form Card */}
-          <motion.div 
-            initial={{ opacity: 0, transform: 'perspective(1000px) rotateY(-5deg) translateX(20px)' }}
-            animate={isInView ? { opacity: 1, transform: 'perspective(1000px) rotateY(0deg) translateX(0px)' } : {}}
-            transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <div className="rounded-[2.5rem] bg-white border border-slate-200 shadow-[0_32px_64px_rgba(0,0,0,0.06)] p-8 lg:p-12">
-              {success ? (
-                <div className="text-center py-20 animate-reveal">
-                  <div className="w-20 h-20 rounded-full bg-green-50 text-green-500 flex items-center justify-center mx-auto mb-8 shadow-inner">
-                    <Check className="w-10 h-10" />
-                  </div>
-                  <h3 className="text-3xl font-bold text-slate-900 mb-4">{c.successTitle}</h3>
-                  <p className="text-lg text-slate-600 font-medium">{c.successText.replace('{email}', 'your inbox')}</p>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">{c.nameLabel}</label>
-                      <input name="name" required placeholder={c.namePlaceholder} className="w-full px-5 py-4 rounded-xl bg-slate-50 border border-slate-100 focus:outline-none focus:ring-2 focus:ring-blue/10 focus:border-blue transition-all font-semibold text-slate-900" />
-                    </div>
-                    <div className="space-y-2">
-                       <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">{c.phoneLabel}</label>
-                       <input name="phone" required placeholder={c.phonePlaceholder} className="w-full px-5 py-4 rounded-xl bg-slate-50 border border-slate-100 focus:outline-none focus:ring-2 focus:ring-blue/10 focus:border-blue transition-all font-semibold text-slate-900" />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">{c.emailLabel}</label>
-                    <input name="email" type="email" required placeholder={c.emailPlaceholder} className="w-full px-5 py-4 rounded-xl bg-slate-50 border border-slate-100 focus:outline-none focus:ring-2 focus:ring-blue/10 focus:border-blue transition-all font-semibold text-slate-900" />
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">{c.bizLabel}</label>
-                      <input name="biz" required placeholder={c.bizPlaceholder} className="w-full px-5 py-4 rounded-xl bg-slate-50 border border-slate-100 focus:outline-none focus:ring-2 focus:ring-blue/10 focus:border-blue transition-all font-semibold text-slate-900" />
-                    </div>
-                    <div className="space-y-2">
-                       <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">{c.agentsLabel}</label>
-                       <select name="teamSize" required className="w-full px-5 py-4 rounded-xl bg-slate-50 border border-slate-100 focus:outline-none focus:ring-2 focus:ring-blue/10 focus:border-blue transition-all font-semibold text-slate-900 appearance-none">
-                         {c.agentsOptions.map((opt, i) => (
-                           <option key={i} value={i === 0 ? "" : opt} disabled={i === 0}>{opt}</option>
-                         ))}
-                       </select>
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">{c.domainLabel}</label>
-                    <input name="domain" placeholder={c.domainPlaceholder} className="w-full px-5 py-4 rounded-xl bg-slate-50 border border-slate-100 focus:outline-none focus:ring-2 focus:ring-blue/10 focus:border-blue transition-all font-semibold text-slate-900" />
-                  </div>
-
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">{c.msgLabel}</label>
-                    <textarea name="msg" placeholder={c.msgPlaceholder} rows={2} className="w-full px-5 py-4 rounded-xl bg-slate-50 border border-slate-100 focus:outline-none focus:ring-2 focus:ring-blue/10 focus:border-blue transition-all font-semibold text-slate-900 resize-none" />
-                  </div>
-
-                  <Button disabled={loading} size="lg" className="w-full rounded-2xl py-7 h-auto text-lg font-bold premium shadow-xl shadow-blue/20 hover:shadow-2xl hover:shadow-blue/30 transition-all hover:-translate-y-1" type="submit">
-                    {loading ? <Loader2 className="animate-spin w-6 h-6" /> : c.submitBtn}
-                  </Button>
-
-                  <p className="text-center text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                    Reserved spot: <span className="text-blue">{slots} founding spots</span> remaining
-                  </p>
-                </form>
-              )}
+          {/* Right — Form Container */}
+          <div className="border border-gray-200 rounded-2xl shadow-[0_8px_40px_rgba(26,58,92,0.14)] overflow-hidden">
+            <div className="bg-navy text-white px-6 py-5">
+              <h3 className="font-sora text-[17px] font-extrabold mb-1">{c.formTitle}</h3>
+              <p className="text-[13px] text-white/65">{c.formSub}</p>
             </div>
-          </motion.div>
+
+            {!success ? (
+              <div className="p-[22px]">
+                {/* Intent Toggle */}
+                <label className={labelCls}>{c.intentLabel}</label>
+                <div className="grid grid-cols-2 gap-2 mb-3.5">
+                  {(['waitlist', 'demo'] as const).map(v => (
+                    <button
+                      key={v}
+                      type="button"
+                      onClick={() => setIntent(v)}
+                      className={`flex flex-col p-2.5 rounded-lg border-[1.5px] text-left transition-all ${intent === v ? 'border-blue bg-sky' : 'border-gray-200'}`}
+                    >
+                      <span className="text-[13px] font-bold">{v === 'waitlist' ? c.intentWaitlist : c.intentDemo}</span>
+                      <span className="text-[11px] text-muted mt-0.5">{v === 'waitlist' ? c.intentWaitlistSub : c.intentDemoSub}</span>
+                    </button>
+                  ))}
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className={labelCls}>{c.nameLabel} <span className="text-red-500">*</span></label>
+                    <input className={inputCls} value={form.name} onChange={set('name')} placeholder={c.namePlaceholder} />
+                  </div>
+                  <div>
+                    <label className={labelCls}>{c.phoneLabel} <span className="text-red-500">*</span></label>
+                    <input className={inputCls} value={form.phone} onChange={set('phone')} placeholder={c.phonePlaceholder} type="tel" />
+                  </div>
+                </div>
+
+                <div className="mt-3">
+                  <label className={labelCls}>{c.emailLabel} <span className="text-red-500">*</span></label>
+                  <input className={inputCls} value={form.email} onChange={set('email')} placeholder={c.emailPlaceholder} type="email" />
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 mt-3">
+                  <div>
+                    <label className={labelCls}>{c.bizLabel}</label>
+                    <input className={inputCls} value={form.biz} onChange={set('biz')} placeholder={c.bizPlaceholder} />
+                  </div>
+                  <div>
+                    <label className={labelCls}>{c.domainLabel}</label>
+                    <input className={inputCls} value={form.domain} onChange={set('domain')} placeholder={c.domainPlaceholder} />
+                  </div>
+                </div>
+
+                <div className="mt-3">
+                  <label className={labelCls}>{c.agentsLabel}</label>
+                  <select className={inputCls} value={form.agents} onChange={set('agents')}>
+                    {c.agentsOptions.map((o: string, i: number) => <option key={i} value={i === 0 ? '' : o}>{o}</option>)}
+                  </select>
+                </div>
+
+                <div className="mt-3 mb-4">
+                  <label className={labelCls}>{c.msgLabel}</label>
+                  <textarea className={inputCls + ' resize-none'} rows={2} value={form.msg} onChange={set('msg')} placeholder={c.msgPlaceholder} />
+                </div>
+
+                <button
+                  onClick={handleSubmit}
+                  disabled={loading}
+                  className="w-full bg-blue hover:bg-navy text-white font-extrabold text-[14px] py-3.5 rounded-lg flex items-center justify-center gap-2 transition-colors disabled:opacity-50"
+                >
+                  {loading ? (
+                    <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  ) : c.submitBtn}
+                </button>
+                <p className="text-[11.5px] text-muted text-center mt-2">{c.submitFine}</p>
+              </div>
+            ) : (
+              <div className="p-10 text-center">
+                <div className="text-[44px] mb-3">🎉</div>
+                <h4 className="font-sora text-[19px] font-extrabold mb-2">{c.successTitle}</h4>
+                <p className="text-[14px] text-muted leading-[1.7]">
+                  {c.successText.replace('{email}', form.email)}
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </section>
