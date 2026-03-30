@@ -51,7 +51,7 @@ export default function FooterNew() {
             </p>
           </div>
           <Link
-            href="/agents"
+            href="/operators"
             style={{
               background: "#2563eb",
               color: "#fff",
@@ -158,20 +158,27 @@ export default function FooterNew() {
             >
               Company
             </h4>
-            {["About TrigrowTech", "Orbitle for Operators", "Careers", "Contact"].map((l) => (
-              <a
-                key={l}
-                href="#"
+            {[
+              { label: "About TrigrowTech", href: "#" },
+              { label: "Orbitle for Operators", href: "/" },
+              { label: "Careers", href: "/careers" },
+              { label: "Earn with Orbitle", href: "/earn" },
+              { label: "Contact", href: "#contact" },
+            ].map(({ label, href }) => (
+              <Link
+                key={label}
+                href={href}
                 style={{
                   display: "block",
                   fontSize: 13,
-                  color: "rgba(255,255,255,0.45)",
+                  color: label === "Earn with Orbitle" ? "#93c5fd" : "rgba(255,255,255,0.45)",
                   textDecoration: "none",
                   marginBottom: 10,
+                  fontWeight: label === "Earn with Orbitle" ? 700 : 400,
                 }}
               >
-                {l}
-              </a>
+                {label}
+              </Link>
             ))}
             <Link
               href="/agents"
@@ -207,8 +214,10 @@ export default function FooterNew() {
               Resources
             </h4>
             {[
-              { label: "Book a Demo", href: "#" },
-              { label: "See Pricing", href: "#" },
+              { label: "Book a Demo", href: "#contact" },
+              { label: "See Pricing", href: "#pricing" },
+              { label: "Careers", href: "/careers" },
+              { label: "Earn with Orbitle", href: "/earn" },
               { label: "Privacy Policy", href: "/privacy-policy" },
               { label: "Terms of Service", href: "/terms-of-service" },
             ].map(({ label, href }) => (
@@ -218,9 +227,10 @@ export default function FooterNew() {
                 style={{
                   display: "block",
                   fontSize: 13,
-                  color: "rgba(255,255,255,0.45)",
+                  color: label === "Earn with Orbitle" ? "#93c5fd" : label === "Careers" ? "rgba(255,255,255,0.7)" : "rgba(255,255,255,0.45)",
                   textDecoration: "none",
                   marginBottom: 10,
+                  fontWeight: label === "Earn with Orbitle" || label === "Careers" ? 600 : 400,
                 }}
               >
                 {label}

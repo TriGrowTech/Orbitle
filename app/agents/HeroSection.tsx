@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 
 // ─────────────────────────────────────────────
 // CONSTANTS
@@ -8,7 +9,7 @@ import React from "react";
 const HERO_PILLS = [
   "Free 1-week trial",
   "Full branding included",
-  "Live in 48 hours",
+  "Live in 5 minutes",
   "Starting ₹499/month",
 ] as const;
 
@@ -95,7 +96,7 @@ function HeroPills() {
   );
 }
 
-/** Fake browser chrome + admin dashboard — hidden on mobile via CSS */
+/** Real Orbitle Admin Dashboard screenshot */
 function DashboardMockup() {
   return (
     <div className="dashboard-mock" style={{ position: "relative", maxWidth: 920, margin: "0 auto" }}>
@@ -138,85 +139,21 @@ function DashboardMockup() {
               color: "rgba(255,255,255,0.55)", maxWidth: 340, margin: "0 auto", textAlign: "center",
             }}
           >
-            <span style={{ color: "rgba(255,255,255,0.85)" }}>sara</span>.sunrisetravel.com ·{" "}
-            <span style={{ color: "rgba(255,255,255,0.3)" }}>Admin Panel</span>
+            <span style={{ color: "rgba(255,255,255,0.85)" }}>admin</span>.orbitle.com ·{" "}
+            <span style={{ color: "rgba(255,255,255,0.3)" }}>Admin Dashboard</span>
           </div>
         </div>
 
-        {/* Dashboard body */}
-        <div style={{ display: "grid", gridTemplateColumns: "200px 1fr", minHeight: 220 }}>
-          {/* Sidebar */}
-          <div style={{ background: "#fff", borderRight: "1px solid #e2e8f0", padding: "16px 0" }}>
-            {DASHBOARD_SIDEBAR_ITEMS.map(({ icon, label, active = false } : { icon: string; label: string; active?: boolean }) => (
-              <div
-                key={label}
-                style={{
-                  padding: "9px 18px", fontSize: 12,
-                  fontWeight: active ? 700 : 500,
-                  color: active ? "#2563eb" : "#7a8fa8",
-                  display: "flex", alignItems: "center", gap: 8,
-                  background: active ? "#eff6ff" : "transparent",
-                  borderRight: active ? "3px solid #2563eb" : "none",
-                }}
-              >
-                <span style={{ fontSize: 14 }}>{icon}</span> {label}
-              </div>
-            ))}
-          </div>
-
-          {/* Content area */}
-          <div style={{ padding: "18px 20px", background: "#f0f4fa" }}>
-            {/* Stat cards */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 10, marginBottom: 14 }}>
-              {DASHBOARD_STATS.map(({ label, val, sub }) => (
-                <div key={label} style={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 10, padding: "14px 16px" }}>
-                  <div style={{ fontSize: 10, fontWeight: 600, color: "#7a8fa8", letterSpacing: "0.05em", textTransform: "uppercase", marginBottom: 6 }}>
-                    {label}
-                  </div>
-                  <div style={{ fontSize: 24, fontWeight: 800, color: "#0d1b2e", letterSpacing: "-0.02em" }}>{val}</div>
-                  <div style={{ fontSize: 11, color: "#16a34a", fontWeight: 600, marginTop: 4 }}>{sub}</div>
-                </div>
-              ))}
-            </div>
-
-            {/* Enquiries table */}
-            <div style={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 10, overflow: "hidden" }}>
-              {/* Table header */}
-              <div
-                style={{
-                  display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr",
-                  padding: "10px 14px", background: "#f0f4fa",
-                  borderBottom: "1px solid #e2e8f0",
-                  fontSize: 10, fontWeight: 700, textTransform: "uppercase",
-                  letterSpacing: "0.06em", color: "#7a8fa8",
-                }}
-              >
-                <span>Enquiry</span><span>Package</span><span>Date</span><span>Status</span>
-              </div>
-
-              {/* Table rows */}
-              {DASHBOARD_ROWS.map((row, i) => (
-                <div
-                  key={i}
-                  style={{
-                    display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr",
-                    padding: "9px 14px",
-                    borderBottom: i < DASHBOARD_ROWS.length - 1 ? "1px solid #e2e8f0" : "none",
-                    fontSize: 11.5, color: "#4b5e7a", alignItems: "center",
-                  }}
-                >
-                  <span style={{ fontWeight: 600, color: "#0d1b2e" }}>{row.name}</span>
-                  <span>{row.pkg}</span>
-                  <span style={{ color: "#7a8fa8" }}>{row.date}</span>
-                  <span>
-                    <span style={{ display: "inline-flex", padding: "2px 8px", borderRadius: 20, fontSize: 10, fontWeight: 700, background: row.sc.bg, color: row.sc.c }}>
-                      {row.status}
-                    </span>
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
+        {/* Real dashboard screenshot */}
+        <div style={{ position: "relative", width: "100%" }}>
+          <Image
+            src="/images/orbitle-dashboard-real.png"
+            alt="Orbitle Admin Dashboard"
+            width={1200}
+            height={750}
+            style={{ width: "100%", height: "auto", display: "block" }}
+            priority
+          />
         </div>
       </div>
     </div>
@@ -292,7 +229,7 @@ export default function HeroSection() {
             }}
           >
             Orbitle gives independent travel agents their own branded marketplace website and admin panel —
-            live on their own domain in 48 hours. No coding. No ₹10,000 freelancer builds. Just your name and your brand.
+            live on their own domain in 5 minutes. No coding. No ₹10,000 freelancer builds. Just your name and your brand.
           </p>
 
           {/* CTA buttons */}

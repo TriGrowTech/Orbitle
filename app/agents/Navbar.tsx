@@ -188,7 +188,7 @@ function Sidebar({
           Early Access
         </div>
         <div style={{ fontSize: 13, color: "rgba(255,255,255,0.8)", lineHeight: 1.5 }}>
-          <strong style={{ color: "#fff" }}>78 spots left</strong> — Lifetime pricing closes at 100 agents
+          <strong style={{ color: "#fff" }}>96 spots left</strong> — Lifetime pricing closes at 100 agents
         </div>
         <div style={{ marginTop: 8, fontSize: 13, fontFamily: "monospace", color: "#93c5fd", fontWeight: 600 }}>
           🕐 {countdown}
@@ -228,7 +228,7 @@ function Sidebar({
         <div style={{ height: 1, background: "#e2e8f0", margin: "12px 8px" }} />
 
         <Link
-          href="/"
+          href="/operators"
           onClick={onClose}
           style={{
             display: "flex",
@@ -243,6 +243,26 @@ function Sidebar({
           }}
         >
           For Operators ↗
+        </Link>
+
+        <div style={{ height: 1, background: "#e2e8f0", margin: "8px 8px" }} />
+        <Link
+          href="/earn"
+          onClick={onClose}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+            padding: "10px 12px",
+            borderRadius: 10,
+            fontSize: 13,
+            fontWeight: 700,
+            color: "#2563eb",
+            textDecoration: "none",
+            background: "#eff6ff",
+          }}
+        >
+          Earn with Orbitle
         </Link>
       </nav>
 
@@ -325,7 +345,7 @@ function AnnouncementBar({
         {/* Message */}
         <span style={{ color: "rgba(255,255,255,0.85)", textAlign: "center" }}>
           First 100 agents get lifetime pricing —{" "}
-          <strong style={{ color: "#fff" }}>78 spots left</strong>
+          <strong style={{ color: "#fff" }}>96 spots left</strong>
         </span>
 
         {/* Timer - hidden on very small screens via CSS class */}
@@ -527,6 +547,7 @@ export default function NavBar() {
 
         {/* Desktop nav links */}
         <div className="nav-links-desktop" style={{ display: "flex", alignItems: "center", gap: 32 }}>
+
           {NAV_LINKS.map(({ label, href }) => (
             <a
               key={label}
@@ -538,20 +559,36 @@ export default function NavBar() {
             </a>
           ))}
           <Link
-            href="/"
+            href="/operators"
             style={{
               fontSize: 13,
-              fontWeight: 600,
-              color: "#7a8fa8",
+              fontWeight: 700,
+              color: "#4b5e7a",
               textDecoration: "none",
-              padding: "5px 14px",
-              borderRadius: 20,
-              border: "1px solid #e2e8f0",
-              transition: "all 0.15s",
+              padding: "6px 14px",
+              borderRadius: 50,
+              background: "#f0f4fa",
               whiteSpace: "nowrap",
+              transition: "all 0.2s",
             }}
           >
-            For Operators ↗
+            Switch to Operators →
+          </Link>
+          <Link
+            href="/earn"
+            className="nav-link"
+            style={{
+              fontSize: 14,
+              fontWeight: 600,
+              color: "#16a34a",
+              textDecoration: "none",
+              whiteSpace: "nowrap",
+              display: "flex",
+              alignItems: "center",
+              gap: 4,
+            }}
+          >
+            <span style={{ fontSize: 12 }}>💸</span> Earn with Orbitle
           </Link>
         </div>
 

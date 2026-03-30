@@ -58,14 +58,22 @@ export default function HeroNew() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12"
           >
-            <Button size="lg" className="rounded-full px-8 py-6 h-auto text-base font-semibold group premium">
+            <a
+              href="#contact-hero"
+              className="inline-flex items-center gap-2 rounded-full px-8 py-4 text-base font-semibold text-white group"
+              style={{ background: "#2563eb", textDecoration: "none" }}
+            >
               {h.cta1}
-              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </Button>
-            <Button size="lg" variant="outline" className="rounded-full px-8 py-6 h-auto text-base font-semibold transition-all hover:bg-slate-50">
-              <Play className="mr-2 w-4 h-4 fill-current" />
+              <ArrowRight className="ml-1 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </a>
+            <a
+              href="#how"
+              className="inline-flex items-center gap-2 rounded-full px-8 py-4 text-base font-semibold border"
+              style={{ textDecoration: "none", color: "#0d1b2e", borderColor: "#cbd5e1", background: "#f8fafc" }}
+            >
+              <Play className="mr-1 w-4 h-4 fill-current" />
               {h.cta2}
-            </Button>
+            </a>
           </motion.div>
 
           <motion.div 
@@ -84,7 +92,7 @@ export default function HeroNew() {
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-green-500" />
-              <span>Live in 48 hours</span>
+              <span>Live in 5 minutes</span>
             </div>
           </motion.div>
         </div>

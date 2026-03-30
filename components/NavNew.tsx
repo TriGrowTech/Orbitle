@@ -19,6 +19,11 @@ const NAV_LINKS: NavLink[] = [
   { label: "Contact",      href: "#contact" },
 ];
 
+const EXTRA_NAV_LINKS: NavLink[] = [
+  { label: "Careers",         href: "/careers" },
+  { label: "Earn with Orbitle", href: "/earn" },
+];
+
 // ─────────────────────────────────────────────
 // SUB-COMPONENTS
 // ─────────────────────────────────────────────
@@ -214,6 +219,29 @@ function Sidebar({
         >
           For Agents ↗
         </Link>
+
+        <div style={{ height: 1, background: "#e2e8f0", margin: "8px 8px" }} />
+
+        {EXTRA_NAV_LINKS.map(({ label, href }) => (
+          <Link
+            key={label}
+            href={href}
+            onClick={onClose}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              padding: "10px 12px",
+              borderRadius: 10,
+              fontSize: 13,
+              fontWeight: 600,
+              color: "#4b5e7a",
+              textDecoration: "none",
+            }}
+          >
+            {label}
+          </Link>
+        ))}
       </nav>
 
       {/* CTA */}
@@ -381,6 +409,7 @@ export default function NavNew() {
           className="hidden lg:flex"
           style={{ alignItems: "center", gap: 28 }}
         >
+
           {NAV_LINKS.map(({ label, href }) => (
             <a
               key={label}
@@ -400,16 +429,33 @@ export default function NavNew() {
             href="/agents"
             style={{
               fontSize: 13,
-              fontWeight: 600,
-              color: "#7a8fa8",
+              fontWeight: 700,
+              color: "#4b5e7a",
               textDecoration: "none",
-              padding: "5px 14px",
-              borderRadius: 20,
-              border: "1px solid #e2e8f0",
+              padding: "6px 14px",
+              borderRadius: 50,
+              background: "#f0f4fa",
               whiteSpace: "nowrap",
+              transition: "all 0.2s",
             }}
           >
-            For Agents ↗
+            Switch to Agents →
+          </Link>
+          <Link
+            href="/earn"
+            className="nav-link"
+            style={{
+              fontSize: 14,
+              fontWeight: 600,
+              color: "#16a34a",
+              textDecoration: "none",
+              whiteSpace: "nowrap",
+              display: "flex",
+              alignItems: "center",
+              gap: 4,
+            }}
+          >
+            <span style={{ fontSize: 12 }}>💸</span> Earn with Orbitle
           </Link>
         </div>
 

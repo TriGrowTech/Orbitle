@@ -130,7 +130,7 @@ export default function ModulesNew() {
                 </h3>
               </div>
               <div className="flex flex-col items-center lg:items-end gap-2">
-                <span className="text-4xl font-black text-blue tracking-tighter">₹999<span className="text-sm font-normal text-slate-400">/mo</span></span>
+                <span className="text-4xl font-black text-blue tracking-tighter">₹1,999<span className="text-sm font-normal text-slate-400">/mo</span></span>
                 <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">All-Inclusive Infrastructure</span>
               </div>
             </div>

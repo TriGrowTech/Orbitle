@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X, ArrowRight, Clock } from 'lucide-react'
 import { useLang } from '@/lib/LangContext'
 
-export default function TopBarNew({ slots = 7, onClose = () => {} }: { slots?: number, onClose?: () => void }) {
+export default function TopBarNew({ slots = 96, onClose = () => {} }: { slots?: number, onClose?: () => void }) {
   const { t } = useLang()
   const [visible, setVisible] = useState(true)
   const [timer, setTimer] = useState('')

@@ -76,7 +76,7 @@ export default function AgentBanner() {
             }}
           >
             Orbitle for Agents is a standalone product — your own branded travel
-            website and admin panel, live on your domain in 48 hours. Starting
+            website and admin panel, live on your domain in 5 minutes. Starting
             at ₹499/month.
           </p>
         </div>

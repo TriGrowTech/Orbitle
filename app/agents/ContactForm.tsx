@@ -84,7 +84,7 @@ function SocialProofStrip() {
           </div>
         ))}
       </div>
-      <span>Join 80+ agents already on early access</span>
+      <span><strong>96 spots</strong> remaining at founding rate</span>
     </div>
   );
 }

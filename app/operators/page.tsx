@@ -1,33 +1,24 @@
-import { redirect } from 'next/navigation'
+"use client";
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "Orbitle",
-  "operatingSystem": "Web-based",
-  "applicationCategory": "TravelAgencySoftware",
-  "offers": {
-    "@type": "Offer",
-    "price": "499",
-    "priceCurrency": "INR"
-  },
-  "description": "White-label travel business platform for independent agents. Launch your branded travel marketplace in 48 hours.",
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.9",
-    "reviewCount": "150"
-  }
-};
+import { useState } from "react";
+import NavNew from "@/components/NavNew";
+import TopBarNew from "@/components/TopBarNew";
+import HeroNew from "@/components/HeroNew";
+import HowItWorksNew from "@/components/HowItWorksNew";
+import ModulesNew from "@/components/ModulesNew";
+import WhyOrbitleNew from "@/components/WhyOrbitleNew";
+import TestimonialsNew from "@/components/TestimonialsNew";
+import PricingNew from "@/components/PricingNew";
+import ContactNew from "@/components/ContactNew";
+import FooterNew from "@/components/FooterNew";
+import AgentBanner from "@/components/AgentBanner";
+import MidPageCTA from "@/components/MidPageCTA";
 
-export default function Home() {
+export default function OperatorsPage() {
   const [pricingUnlocked, setPricingUnlocked] = useState(false);
 
   return (
     <main>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
       <TopBarNew />
       <NavNew />
       <HeroNew />

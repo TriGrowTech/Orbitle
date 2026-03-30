@@ -59,7 +59,7 @@ const GLOBAL_STYLES = `
     .hero-actions    { flex-direction: column !important; align-items: stretch !important; }
     .hero-actions a  { text-align: center !important; justify-content: center !important; }
     .hero-pills      { gap: 12px !important; }
-    .dashboard-mock  { display: none !important; }
+    .dashboard-mock  { margin-top: 32px !important; }
 
     /* Sections */
     .section-pad     { padding: 56px 20px !important; }
@@ -104,7 +104,7 @@ const GLOBAL_STYLES = `
 const HOW_IT_WORKS_STEPS = [
   { n: 1, tag: "We do the setup",    title: "Tell Us Your Domain",              body: "Share your domain name. We handle DNS, SSL, hosting, and every technical detail. Don't have one? We provide it — included on 6-month and yearly plans." },
   { n: 2, tag: "You're in control",  title: "Add Packages & Brand Your Site",   body: "Upload your tour packages, set prices, add photos, write your bio. Your admin panel gives you full control over everything customers see — no technical skills required." },
-  { n: 3, tag: "Live in 48 hours",   title: "Receive Enquiries Directly",       body: "Customers visit your website, browse your packages, and fill your enquiry form. Every lead lands directly in your admin panel. Share your link on WhatsApp, Instagram, Google — watch enquiries come in." },
+  { n: 3, tag: "Live in 5 minutes",  title: "Receive Enquiries Directly",       body: "Customers visit your website, browse your packages, and fill your enquiry form. Every lead lands directly in your admin panel. Share your link on WhatsApp, Instagram, Google — watch enquiries come in." },
 ] as const;
 
 const PLATFORM_CARDS = [
@@ -172,7 +172,7 @@ const WHAT_CHANGES_CARDS = [
 ] as const;
 
 const WHY_CARDS = [
-  { icon: "🚀", title: "Live in 48 hours — not 6 weeks",    body: "Freelancers take 4–8 weeks to build a basic site. Orbitle has you live in 48 hours. Share your domain, we handle DNS, SSL, hosting, and setup — you're done." },
+  { icon: "🚀", title: "Live in 5 minutes — not 6 weeks",    body: "Freelancers take 4–8 weeks to build a basic site. Orbitle has you live in 5 minutes. Share your domain, we handle DNS, SSL, hosting, and setup — you're done." },
   { icon: "🏷️", title: "Your brand. Not a listing on ours.", body: "Everything runs on your domain — yourname.com. Not on a platform you don't own. Every click, every enquiry stays with you." },
   { icon: "📲", title: "Built for WhatsApp-first agents",    body: "Share your website link on WhatsApp, Instagram, Google My Business. Customers browse your packages, fill the form — you get a notification instantly." },
   { icon: "🔧", title: "No developer. No extra cost. Ever.", body: "Add packages, update prices, change your homepage banner — all from your admin panel. No calling a developer. No waiting. No extra billing." },
@@ -212,19 +212,29 @@ const PRICING_PLANS = [
 const FOOTER_COLUMNS = [
   {
     heading: "Platform",
-    links: ["Travel Marketplace", "Admin Panel", "Package Management", "Enquiry Tracking"],
+    links: [
+      { label: "Travel Marketplace", href: "#platform" },
+      { label: "Admin Panel", href: "#platform" },
+      { label: "Package Management", href: "#platform" },
+      { label: "Enquiry Tracking", href: "#platform" },
+    ],
   },
   {
     heading: "Company",
-    links: ["About TrigrowTech", "Careers", "Contact"],
-    extra: { label: "For Operators ↗", href: "/" },
+    links: [
+      { label: "About TrigrowTech", href: "#" },
+      { label: "Careers", href: "/careers" },
+      { label: "Earn with Orbitle", href: "/earn" },
+      { label: "Contact", href: "#get-started" },
+    ],
+    extra: { label: "For Operators ↗", href: "/operators" },
   },
   {
     heading: "Resources",
     links: [
-      { label: "Get Your Website", href: "#" },
-      { label: "See Pricing", href: "#" },
-      { label: "Book a Demo", href: "#" },
+      { label: "Get Your Website", href: "#get-started" },
+      { label: "See Pricing", href: "#pricing" },
+      { label: "Book a Demo", href: "#get-started" },
       { label: "Privacy Policy", href: "/privacy-policy" },
       { label: "Terms of Service", href: "/terms-of-service" },
     ],
@@ -291,7 +301,7 @@ function HowItWorksSection() {
       <div style={{ maxWidth: 1080, margin: "0 auto" }}>
         <Eyebrow>How It Works</Eyebrow>
         <SectionTitle>You bring the packages.<br />We build the platform.</SectionTitle>
-        <SectionSub>Three steps from zero to a professional travel website running on your own domain — in 48 hours.</SectionSub>
+        <SectionSub>Three steps from zero to a professional travel website running on your own domain — in 5 minutes.</SectionSub>
 
         <div className="grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 20 }}>
           {HOW_IT_WORKS_STEPS.map(({ n, tag, title, body }) => (
@@ -431,7 +441,7 @@ function WhyOrbitleSection() {
 
 function MidPageCTASection({ onFormSubmit }: { onFormSubmit: () => void }) {
   const FEATURES = [
-    { icon: "⚡", title: "48-hour setup",              sub: "We configure everything — DNS, SSL, hosting, theme" },
+    { icon: "⚡", title: "5-minute setup",              sub: "We configure everything — DNS, SSL, hosting, theme" },
     { icon: "📋", title: "Full admin panel included",   sub: "Manage packages and leads from day one" },
     { icon: "♾️", title: "Lifetime plan available",     sub: "₹9,999 once — never pay again" },
   ] as const;
@@ -448,7 +458,7 @@ function MidPageCTASection({ onFormSubmit }: { onFormSubmit: () => void }) {
               Ready to stop losing leads on WhatsApp?
             </h2>
             <p style={{ fontSize: 16, color: "rgba(255,255,255,0.6)", lineHeight: 1.75, marginBottom: 36 }}>
-              Get your own branded travel website live in 48 hours. Start with a 1-week free trial — no credit card required.
+              Get your own branded travel website live in 5 minutes. Start with a 1-week free trial — no credit card required.
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               {FEATURES.map(({ icon, title, sub }) => (
@@ -586,7 +596,7 @@ function MainCTASection({ onFormSubmit }: { onFormSubmit: () => void }) {
   const ITEMS = [
     { icon: "🎁", title: "Founding Discount",       sub: "Locked in permanently on submission. Not available after 100 agents." },
     { icon: "⚡", title: "1-Week Free Trial",        sub: "Explore the full platform before paying a single rupee." },
-    { icon: "🌐", title: "Live in 48 Hours",         sub: "Full website on your domain. We handle every technical detail." },
+    { icon: "🌐", title: "Live in 5 Minutes",         sub: "Full website on your domain. We handle every technical detail." },
     { icon: "♾️", title: "Lifetime Plan Available",  sub: "Pay ₹9,999 once — same price as a freelancer build, but forever." },
   ] as const;
 
@@ -719,6 +729,24 @@ export default function AgentsPage() {
       <TestimonialsSection />
       <PricingSection unlocked={pricingUnlocked} />
       <MainCTASection onFormSubmit={unlockPricing} />
+
+      {/* Operators CTA Banner */}
+      <section style={{ background: "#0d1b2e", borderTop: "1px solid rgba(255,255,255,0.07)" }}>
+        <div style={{ maxWidth: 1080, margin: "0 auto", padding: "40px 24px", display: "flex", flexDirection: "column", gap: 20, alignItems: "center", textAlign: "center" }}>
+          <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "#93c5fd" }}>Running a team of agents?</div>
+          <h3 style={{ fontSize: "clamp(20px, 3vw, 32px)", fontWeight: 800, color: "#fff", letterSpacing: "-0.02em", lineHeight: 1.2 }}>
+            Orbitle for Operators — built for travel companies with agents.
+          </h3>
+          <p style={{ fontSize: 15, color: "rgba(255,255,255,0.55)", lineHeight: 1.7, maxWidth: 560 }}>
+            Marketplace website, agent portal, lead management, subdomains for every agent — all on your domain. If you have a team, this is the platform.
+          </p>
+          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
+            <a href="/operators" style={{ background: "#2563eb", color: "#fff", fontSize: 14, fontWeight: 700, padding: "13px 28px", borderRadius: 50, textDecoration: "none" }}>Explore Orbitle for Operators →</a>
+           
+          </div>
+        </div>
+      </section>
+
       <Footer />
     </div>
   );
