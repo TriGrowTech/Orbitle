@@ -101,9 +101,9 @@ const GLOBAL_STYLES = `
 // ─────────────────────────────────────────────
 
 const HOW_IT_WORKS_STEPS = [
-  { n: 1, tag: "We do the setup",    title: "Tell Us Your Domain",              body: "Share your domain name. We handle DNS, SSL, hosting, and every technical detail. Don't have one? We provide it — included on 6-month and yearly plans." },
-  { n: 2, tag: "You're in control",  title: "Add Packages & Brand Your Site",   body: "Upload your tour packages, set prices, add photos, write your bio. Your admin panel gives you full control over everything customers see — no technical skills required." },
-  { n: 3, tag: "Live in 5 minutes",  title: "Receive Enquiries Directly",       body: "Customers visit your website, browse your packages, and fill your enquiry form. Every lead lands directly in your admin panel. Share your link on WhatsApp, Instagram, Google — watch enquiries come in." },
+  { n: 1, tag: "We do the setup", title: "Tell Us Your Domain", body: "Share your domain name. We handle DNS, SSL, hosting, and every technical detail. Don't have one? We provide it — included on 6-month and yearly plans." },
+  { n: 2, tag: "You're in control", title: "Add Packages & Brand Your Site", body: "Upload your tour packages, set prices, add photos, write your bio. Your admin panel gives you full control over everything customers see — no technical skills required." },
+  { n: 3, tag: "Live in 5 minutes", title: "Receive Enquiries Directly", body: "Customers visit your website, browse your packages, and fill your enquiry form. Every lead lands directly in your admin panel. Share your link on WhatsApp, Instagram, Google — watch enquiries come in." },
 ] as const;
 
 const PLATFORM_CARDS = [
@@ -164,45 +164,45 @@ const PLATFORM_CARDS = [
 ] as const;
 
 const WHAT_CHANGES_CARDS = [
-  { label: "Your Online Presence", before: "WhatsApp link",  after: "yourname.com",   pill: "Professional",        pillColor: "#2563eb", pillBg: "#eff6ff", desc: "Stop sharing a WhatsApp link or PDF catalogue. Give customers a real website that earns trust before they ever call you." },
-  { label: "Enquiry Management",   before: "WhatsApp chaos", after: "Clean dashboard", pill: "Organised",           pillColor: "#16a34a", pillBg: "#dcfce7", desc: "Every lead in one place with status, notes, and follow-up reminders. Never lose track of a potential booking again." },
-  { label: "Setup Cost",           before: "₹10,000 + wait", after: "₹499/month",      pill: "Or ₹9,999 lifetime", pillColor: "#16a34a", pillBg: "#dcfce7", desc: "No one-time builds that go stale. Your platform is always maintained, updated, and supported." },
-  { label: "Lead Leakage",         before: "Lost in chats",  after: "~0% lost",        pill: "Eliminated",          pillColor: "#16a34a", pillBg: "#dcfce7", desc: "Every enquiry from your website lands in your admin panel. No missed messages, no leads buried in WhatsApp threads." },
+  { label: "Your Online Presence", before: "WhatsApp link", after: "yourname.com", pill: "Professional", pillColor: "#2563eb", pillBg: "#eff6ff", desc: "Stop sharing a WhatsApp link or PDF catalogue. Give customers a real website that earns trust before they ever call you." },
+  { label: "Enquiry Management", before: "WhatsApp chaos", after: "Clean dashboard", pill: "Organised", pillColor: "#16a34a", pillBg: "#dcfce7", desc: "Every lead in one place with status, notes, and follow-up reminders. Never lose track of a potential booking again." },
+  { label: "Setup Cost", before: "₹10,000 + wait", after: "₹499/month", pill: "Or ₹9,999 lifetime", pillColor: "#16a34a", pillBg: "#dcfce7", desc: "No one-time builds that go stale. Your platform is always maintained, updated, and supported." },
+  { label: "Lead Leakage", before: "Lost in chats", after: "~0% lost", pill: "Eliminated", pillColor: "#16a34a", pillBg: "#dcfce7", desc: "Every enquiry from your website lands in your admin panel. No missed messages, no leads buried in WhatsApp threads." },
 ] as const;
 
 const WHY_CARDS = [
-  { icon: "🚀", title: "Live in 5 minutes — not 6 weeks",    body: "Freelancers take 4–8 weeks to build a basic site. Orbitle has you live in 5 minutes. Share your domain, we handle DNS, SSL, hosting, and setup — you're done." },
+  { icon: "🚀", title: "Live in 5 minutes — not 6 weeks", body: "Freelancers take 4–8 weeks to build a basic site. Orbitle has you live in 5 minutes. Share your domain, we handle DNS, SSL, hosting, and setup — you're done." },
   { icon: "🏷️", title: "Your brand. Not a listing on ours.", body: "Everything runs on your domain — yourname.com. Not on a platform you don't own. Every click, every enquiry stays with you." },
-  { icon: "📲", title: "Built for WhatsApp-first agents",    body: "Share your website link on WhatsApp, Instagram, Google My Business. Customers browse your packages, fill the form — you get a notification instantly." },
+  { icon: "📲", title: "Built for WhatsApp-first agents", body: "Share your website link on WhatsApp, Instagram, Google My Business. Customers browse your packages, fill the form — you get a notification instantly." },
   { icon: "🔧", title: "No developer. No extra cost. Ever.", body: "Add packages, update prices, change your homepage banner — all from your admin panel. No calling a developer. No waiting. No extra billing." },
-  { icon: "📈", title: "Grow into an operator later",        body: "When you're ready to hire agents under you, upgrade to the full Orbitle operator bundle. Your website, your data, your brand — nothing starts from scratch." },
-  { icon: "🛡️", title: "TrigrowTech manages everything",    body: "Hosting, uptime, SSL renewal, platform updates — all handled by TrigrowTech. You focus on selling tours. We keep the infrastructure running 24/7." },
+  { icon: "📈", title: "Grow into an operator later", body: "When you're ready to hire agents under you, upgrade to the full Orbitle operator bundle. Your website, your data, your brand — nothing starts from scratch." },
+  { icon: "🛡️", title: "TrigrowTech manages everything", body: "Hosting, uptime, SSL renewal, platform updates — all handled by TrigrowTech. You focus on selling tours. We keep the infrastructure running 24/7." },
 ] as const;
 
 const TESTIMONIALS = [
-  { init: "SM", name: "Sara M.",   role: "Independent Agent, Mumbai",  text: "I've been sending people my Justdial page because I don't have my own website. I paid someone ₹8,000 for a site two years ago and it just stopped working. This is exactly what I needed." },
-  { init: "RK", name: "Ravi K.",   role: "Travel Agent, Hyderabad",    text: "I manage all my leads on WhatsApp and I lose track of at least 20–30% of them. A proper enquiry dashboard with follow-up reminders — this is what I've needed for years." },
-  { init: "AM", name: "Anjali M.", role: "Travel Agent, Lucknow",      text: "The lifetime plan got me. I was about to spend ₹12,000 getting a website built. Same price — but now I get admin panel, enquiry tracking, hosting, support, ongoing. Not even a comparison." },
+  { init: "SM", name: "Sara M.", role: "Independent Agent, Mumbai", text: "I've been sending people my Justdial page because I don't have my own website. I paid someone ₹8,000 for a site two years ago and it just stopped working. This is exactly what I needed." },
+  { init: "RK", name: "Ravi K.", role: "Travel Agent, Hyderabad", text: "I manage all my leads on WhatsApp and I lose track of at least 20–30% of them. A proper enquiry dashboard with follow-up reminders — this is what I've needed for years." },
+  { init: "AM", name: "Anjali M.", role: "Travel Agent, Lucknow", text: "The lifetime plan got me. I was about to spend ₹12,000 getting a website built. Same price — but now I get admin panel, enquiry tracking, hosting, support, ongoing. Not even a comparison." },
 ] as const;
 
 const PRICING_PLANS = (spots: number) => [
   {
-    name: "Monthly",    price: "₹499",    per: "₹17/day · Billed monthly",          save: "Start anytime", featured: false,
+    name: "Monthly", price: "₹499", per: "₹17/day · Billed monthly", save: "Start anytime", featured: false,
     features: ["Travel marketplace website", "Full admin panel", "Bring your own domain", "Package management", "Enquiry tracking & pipeline", "1-week free trial"],
     cta: "Get Started →",
   },
   {
-    name: "6 Months",   price: "₹2,499",  per: "₹14/day · Save ₹495",               save: "Save 17%",      featured: false,
+    name: "6 Months", price: "₹2,499", per: "₹14/day · Save ₹495", save: "Save 17%", featured: false,
     features: ["Everything in Monthly", "Domain included (we provide)", "Priority email support", "Package management", "Enquiry tracking & pipeline", "1-week free trial"],
     cta: "Get Started →",
   },
   {
-    name: "Yearly",     price: "₹3,999",  per: "₹11/day · Save ₹1,989",             save: "Save 33%",      featured: true,
+    name: "Yearly", price: "₹3,999", per: "₹11/day · Save ₹1,989", save: "Save 33%", featured: true,
     features: ["Everything in 6-Month", "Domain included", "Priority WhatsApp support", "Quarterly content updates", "SEO meta setup included", "1-week free trial"],
     cta: "Get Started →",
   },
   {
-    name: "Lifetime",   price: "₹9,999",  per: "One-time · Pay once, yours forever", save: `${spots} spots left`, featured: false,
+    name: "Lifetime", price: "₹9,999", per: "One-time · Pay once, yours forever", save: `${spots} spots left`, featured: false,
     features: ["Everything in Yearly", "Domain included — forever", "Dedicated support", "Ongoing content updates", "First access to new features", "No renewal. Ever."],
     cta: "Claim Lifetime →",
   },
@@ -440,9 +440,9 @@ function WhyOrbitleSection() {
 
 function MidPageCTASection({ onFormSubmit }: { onFormSubmit: () => void }) {
   const FEATURES = [
-    { icon: "⚡", title: "5-minute setup",              sub: "We configure everything — DNS, SSL, hosting, theme" },
-    { icon: "📋", title: "Full admin panel included",   sub: "Manage packages and leads from day one" },
-    { icon: "♾️", title: "Lifetime plan available",     sub: "₹9,999 once — never pay again" },
+    { icon: "⚡", title: "5-minute setup", sub: "We configure everything — DNS, SSL, hosting, theme" },
+    { icon: "📋", title: "Full admin panel included", sub: "Manage packages and leads from day one" },
+    { icon: "♾️", title: "Lifetime plan available", sub: "₹9,999 once — never pay again" },
   ] as const;
 
   return (
@@ -584,22 +584,22 @@ function PricingSection({ unlocked, spots }: { unlocked: boolean; spots: number 
           </div>
         </div>
 
-        <div style={{ marginTop: 28, background: "#f0f4fa", border: "#e2e8f0 1.5px solid", borderRadius: 12, padding: "20px 24px", fontSize: 13.5, color: "#7a8fa8", lineHeight: 1.7, textAlign: "center" }}>
+        <di style={{ marginTop: 28, background: "#f0f4fa", border: "#e2e8f0 1.5px solid", borderRadius: 12, padding: "20px 24px", fontSize: 13.5, color: "#7a8fa8", lineHeight: 1.7, textAlign: "center" }}>
           <strong style={{ color: "#0d1b2e" }}>Domain Note:</strong> We provision and configure your domain as part of the subscription. Domain provisioning by us requires a minimum 6-month plan. You can also bring your own domain on any plan. ·{" "}
           <strong style={{ color: "#0d1b2e" }}>All plans include a 1-week free trial.</strong> ·{" "}
           <strong style={{ color: "#0d1b2e" }}>Lifetime plan is limited to the first 100 agents.</strong> {spots} founding spots remaining.
-        </div>
       </div>
-    </section>
+    </div>
+    </section >
   );
 }
 
 function MainCTASection({ onFormSubmit }: { onFormSubmit: () => void }) {
   const ITEMS = [
-    { icon: "🎁", title: "Founding Discount",       sub: "Locked in permanently on submission. Not available after 100 agents." },
-    { icon: "⚡", title: "1-Week Free Trial",        sub: "Explore the full platform before paying a single rupee." },
-    { icon: "🌐", title: "Live in 5 Minutes",         sub: "Full website on your domain. We handle every technical detail." },
-    { icon: "♾️", title: "Lifetime Plan Available",  sub: "Pay ₹9,999 once — same price as a freelancer build, but forever." },
+    { icon: "🎁", title: "Founding Discount", sub: "Locked in permanently on submission. Not available after 100 agents." },
+    { icon: "⚡", title: "1-Week Free Trial", sub: "Explore the full platform before paying a single rupee." },
+    { icon: "🌐", title: "Live in 5 Minutes", sub: "Full website on your domain. We handle every technical detail." },
+    { icon: "♾️", title: "Lifetime Plan Available", sub: "Pay ₹9,999 once — same price as a freelancer build, but forever." },
   ] as const;
 
   return (
@@ -745,7 +745,7 @@ export default function AgentsPage() {
           </p>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
             <a href="/operators" style={{ background: "#2563eb", color: "#fff", fontSize: 14, fontWeight: 700, padding: "13px 28px", borderRadius: 50, textDecoration: "none" }}>Explore Orbitle for Operators →</a>
-           
+
           </div>
         </div>
       </section>
