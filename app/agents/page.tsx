@@ -584,12 +584,12 @@ function PricingSection({ unlocked, spots }: { unlocked: boolean; spots: number 
           </div>
         </div>
 
-        <di style={{ marginTop: 28, background: "#f0f4fa", border: "#e2e8f0 1.5px solid", borderRadius: 12, padding: "20px 24px", fontSize: 13.5, color: "#7a8fa8", lineHeight: 1.7, textAlign: "center" }}>
+        <div style={{ marginTop: 28, background: "#f0f4fa", border: "#e2e8f0 1.5px solid", borderRadius: 12, padding: "20px 24px", fontSize: 13.5, color: "#7a8fa8", lineHeight: 1.7, textAlign: "center" }}>
           <strong style={{ color: "#0d1b2e" }}>Domain Note:</strong> We provision and configure your domain as part of the subscription. Domain provisioning by us requires a minimum 6-month plan. You can also bring your own domain on any plan. ·{" "}
           <strong style={{ color: "#0d1b2e" }}>All plans include a 1-week free trial.</strong> ·{" "}
           <strong style={{ color: "#0d1b2e" }}>Lifetime plan is limited to the first 100 agents.</strong> {spots} founding spots remaining.
+        </div>
       </div>
-    </div>
     </section >
   );
 }
