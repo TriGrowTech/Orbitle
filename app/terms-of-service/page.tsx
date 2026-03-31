@@ -4,9 +4,7 @@ import React from "react";
 import Link from "next/link";
 
 const STYLES = `
-  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
   body { font-family: 'Plus Jakarta Sans', sans-serif; }
 
   .tos-prose h2 {
@@ -37,7 +35,7 @@ export default function TermsOfServicePage() {
         WebkitFontSmoothing: "antialiased",
       }}
     >
-      <style>{STYLES}</style>
+      <style dangerouslySetInnerHTML={{ __html: STYLES }} />
 
       {/* ── Top Nav ── */}
       <nav

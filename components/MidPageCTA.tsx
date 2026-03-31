@@ -240,7 +240,7 @@ export default function MidPageCTA() {
                   <input
                     name="name"
                     required
-                    placeholder="Rahul Sharma"
+                    placeholder="Enter your full name"
                     style={inputStyle}
                   />
                 </label>
@@ -262,7 +262,7 @@ export default function MidPageCTA() {
                     name="phone"
                     required
                     type="tel"
-                    placeholder="+91 98765 43210"
+                    placeholder="+91 00000 00000"
                     style={inputStyle}
                   />
                 </label>
@@ -284,7 +284,7 @@ export default function MidPageCTA() {
                 <input
                   name="business"
                   required
-                  placeholder="Horizon Travel Pvt. Ltd."
+                  placeholder="Your Company Name"
                   style={inputStyle}
                 />
               </label>

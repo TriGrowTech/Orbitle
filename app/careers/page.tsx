@@ -288,20 +288,20 @@ function ApplyModal({ jobId, onClose }: { jobId: string; onClose: () => void }) 
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                 <label style={{ display: "flex", flexDirection: "column", gap: 5 }}>
                   <span style={{ fontSize: 12, fontWeight: 700, color: "#0d1b2e" }}>Full Name *</span>
-                  <input name="name" type="text" required placeholder="Rahul Sharma" style={{ padding: "10px 14px", border: "1.5px solid #e2e8f0", borderRadius: 10, fontSize: 14, fontFamily: "inherit", outline: "none", background: "#f8fafc", color: "#0d1b2e" }} />
+                  <input name="name" type="text" required placeholder="Enter your full name" style={{ padding: "10px 14px", border: "1.5px solid #e2e8f0", borderRadius: 10, fontSize: 14, fontFamily: "inherit", outline: "none", background: "#f8fafc", color: "#0d1b2e" }} />
                 </label>
                 <label style={{ display: "flex", flexDirection: "column", gap: 5 }}>
                   <span style={{ fontSize: 12, fontWeight: 700, color: "#0d1b2e" }}>Phone *</span>
-                  <input name="phone" type="tel" required placeholder="+91 98765 43210" style={{ padding: "10px 14px", border: "1.5px solid #e2e8f0", borderRadius: 10, fontSize: 14, fontFamily: "inherit", outline: "none", background: "#f8fafc", color: "#0d1b2e" }} />
+                  <input name="phone" type="tel" required placeholder="+91 00000 00000" style={{ padding: "10px 14px", border: "1.5px solid #e2e8f0", borderRadius: 10, fontSize: 14, fontFamily: "inherit", outline: "none", background: "#f8fafc", color: "#0d1b2e" }} />
                 </label>
               </div>
               <label style={{ display: "flex", flexDirection: "column", gap: 5 }}>
                 <span style={{ fontSize: 12, fontWeight: 700, color: "#0d1b2e" }}>Email Address *</span>
-                <input name="email" type="email" required placeholder="rahul@email.com" style={{ padding: "10px 14px", border: "1.5px solid #e2e8f0", borderRadius: 10, fontSize: 14, fontFamily: "inherit", outline: "none", background: "#f8fafc", color: "#0d1b2e" }} />
+                <input name="email" type="email" required placeholder="name@example.com" style={{ padding: "10px 14px", border: "1.5px solid #e2e8f0", borderRadius: 10, fontSize: 14, fontFamily: "inherit", outline: "none", background: "#f8fafc", color: "#0d1b2e" }} />
               </label>
               <label style={{ display: "flex", flexDirection: "column", gap: 5 }}>
                 <span style={{ fontSize: 12, fontWeight: 700, color: "#0d1b2e" }}>LinkedIn / Portfolio URL <span style={{ fontWeight: 400, color: "#7a8fa8" }}>(optional)</span></span>
-                <input name="portfolio" type="text" placeholder="linkedin.com/in/rahulsharma or yourportfolio.com" style={{ padding: "10px 14px", border: "1.5px solid #e2e8f0", borderRadius: 10, fontSize: 14, fontFamily: "inherit", outline: "none", background: "#f8fafc", color: "#0d1b2e" }} />
+                <input name="portfolio" type="text" placeholder="e.g. linkedin.com/in/yourname" style={{ padding: "10px 14px", border: "1.5px solid #e2e8f0", borderRadius: 10, fontSize: 14, fontFamily: "inherit", outline: "none", background: "#f8fafc", color: "#0d1b2e" }} />
               </label>
               <label style={{ display: "flex", flexDirection: "column", gap: 5 }}>
                 <span style={{ fontSize: 12, fontWeight: 700, color: "#0d1b2e" }}>Why do you want to join Orbitle? *</span>
@@ -329,16 +329,14 @@ export default function CareersPage() {
 
   return (
     <div style={{ fontFamily: "'Plus Jakarta Sans', -apple-system, sans-serif", background: "#f0f4fa", color: "#0d1b2e", minHeight: "100vh" }}>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+      <style dangerouslySetInnerHTML={{ __html: `
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        html { scroll-behavior: smooth; }
         @media (max-width: 768px) {
           .careers-grid { grid-template-columns: 1fr !important; }
           .job-body-grid { grid-template-columns: 1fr !important; }
           .hero-pad { padding: 56px 20px !important; }
         }
-      `}</style>
+      ` }} />
 
       {/* Nav */}
       <nav style={{ background: "#fff", borderBottom: "1px solid #e2e8f0", padding: "0 24px", height: 60, display: "flex", alignItems: "center", justifyContent: "space-between" }}>

@@ -301,7 +301,7 @@ export default function NavNew() {
   return (
     <>
       {/* Desktop size restoration via CSS — mobile stays compact, desktop gets full sizes */}
-      <style>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         @media (min-width: 1024px) {
           .nav-root-ops   { height: 64px !important; padding: 0 24px !important; gap: 16px !important; }
           .nav-brand-ops  { gap: 10px !important; }
@@ -309,7 +309,7 @@ export default function NavNew() {
           .nav-name-ops   { font-size: 18px !important; }
           .nav-badge-ops  { font-size: 11px !important; padding: 3px 10px !important; }
         }
-      `}</style>
+      ` }} />
 
       {/* Sidebar backdrop + panel */}
       {sidebarOpen && <SidebarBackdrop onClick={() => setSidebarOpen(false)} />}

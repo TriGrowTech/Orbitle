@@ -5,14 +5,13 @@ import Link from "next/link";
 import NavBar from "./Navbar";
 import HeroSection from "./HeroSection";
 import ContactForm from "./ContactForm";
+import { useSpots } from "@/context/SpotsContext";
 
 // ─────────────────────────────────────────────
 // GLOBAL STYLES (injected once at page level)
 // ─────────────────────────────────────────────
 const GLOBAL_STYLES = `
-  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
   input, select, textarea, button { font-family: 'Plus Jakarta Sans', sans-serif; }
 
   input:focus, select:focus, textarea:focus {
@@ -186,7 +185,7 @@ const TESTIMONIALS = [
   { init: "AM", name: "Anjali M.", role: "Travel Agent, Lucknow",      text: "The lifetime plan got me. I was about to spend ₹12,000 getting a website built. Same price — but now I get admin panel, enquiry tracking, hosting, support, ongoing. Not even a comparison." },
 ] as const;
 
-const PRICING_PLANS = [
+const PRICING_PLANS = (spots: number) => [
   {
     name: "Monthly",    price: "₹499",    per: "₹17/day · Billed monthly",          save: "Start anytime", featured: false,
     features: ["Travel marketplace website", "Full admin panel", "Bring your own domain", "Package management", "Enquiry tracking & pipeline", "1-week free trial"],
@@ -203,7 +202,7 @@ const PRICING_PLANS = [
     cta: "Get Started →",
   },
   {
-    name: "Lifetime",   price: "₹9,999",  per: "One-time · Pay once, yours forever", save: "78 spots left", featured: false,
+    name: "Lifetime",   price: "₹9,999",  per: "One-time · Pay once, yours forever", save: `${spots} spots left`, featured: false,
     features: ["Everything in Yearly", "Domain included — forever", "Dedicated support", "Ongoing content updates", "First access to new features", "No renewal. Ever."],
     cta: "Claim Lifetime →",
   },
@@ -512,7 +511,10 @@ function TestimonialsSection() {
   );
 }
 
-function PricingSection({ unlocked }: { unlocked: boolean }) {
+function PricingSection({ unlocked, spots }: { unlocked: boolean; spots: number }) {
+  const plans = PRICING_PLANS(spots);
+  const [activePlan, setActivePlan] = useState("Monthly");
+
   return (
     <section id="pricing" className="section-pad" style={{ background: "#fff", padding: "88px 40px", textAlign: "center" }}>
       <div style={{ maxWidth: 1080, margin: "0 auto" }}>
@@ -543,7 +545,7 @@ function PricingSection({ unlocked }: { unlocked: boolean }) {
           )}
 
           <div className="pricing-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 16, filter: unlocked ? "none" : "blur(8px) grayscale(1)", opacity: unlocked ? 1 : 0.35, pointerEvents: unlocked ? "auto" : "none", userSelect: unlocked ? "auto" : "none", transition: "all 0.5s ease" }}>
-            {PRICING_PLANS.map(({ name, price, per, save, featured, features, cta }) => (
+            {plans.map(({ name, price, per, save, featured, features, cta }) => (
               <div
                 key={name}
                 className="pcard"
@@ -582,10 +584,10 @@ function PricingSection({ unlocked }: { unlocked: boolean }) {
           </div>
         </div>
 
-        <div style={{ marginTop: 28, background: "#f0f4fa", border: "1px solid #e2e8f0", borderRadius: 12, padding: "20px 24px", fontSize: 13.5, color: "#7a8fa8", lineHeight: 1.7, textAlign: "center" }}>
+        <div style={{ marginTop: 28, background: "#f0f4fa", border: "#e2e8f0 1.5px solid", borderRadius: 12, padding: "20px 24px", fontSize: 13.5, color: "#7a8fa8", lineHeight: 1.7, textAlign: "center" }}>
           <strong style={{ color: "#0d1b2e" }}>Domain Note:</strong> We provision and configure your domain as part of the subscription. Domain provisioning by us requires a minimum 6-month plan. You can also bring your own domain on any plan. ·{" "}
           <strong style={{ color: "#0d1b2e" }}>All plans include a 1-week free trial.</strong> ·{" "}
-          <strong style={{ color: "#0d1b2e" }}>Lifetime plan is limited to the first 100 agents.</strong> 78 founding spots remaining.
+          <strong style={{ color: "#0d1b2e" }}>Lifetime plan is limited to the first 100 agents.</strong> {spots} founding spots remaining.
         </div>
       </div>
     </section>
@@ -686,6 +688,7 @@ function Footer() {
 // ─────────────────────────────────────────────
 export default function AgentsPage() {
   const [pricingUnlocked, setPricingUnlocked] = useState(false);
+  const { spots } = useSpots();
   const unlockPricing = () => setPricingUnlocked(true);
 
   const jsonLd = {
@@ -716,7 +719,7 @@ export default function AgentsPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <style>{GLOBAL_STYLES}</style>
+      <style dangerouslySetInnerHTML={{ __html: GLOBAL_STYLES }} />
 
       <NavBar />
       <HeroSection />
@@ -727,7 +730,7 @@ export default function AgentsPage() {
       <WhyOrbitleSection />
       <MidPageCTASection onFormSubmit={unlockPricing} />
       <TestimonialsSection />
-      <PricingSection unlocked={pricingUnlocked} />
+      <PricingSection unlocked={pricingUnlocked} spots={spots} />
       <MainCTASection onFormSubmit={unlockPricing} />
 
       {/* Operators CTA Banner */}

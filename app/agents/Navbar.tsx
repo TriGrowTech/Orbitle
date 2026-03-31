@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useSpots } from "@/context/SpotsContext";
 
 // ─────────────────────────────────────────────
 // TYPES
@@ -92,10 +93,12 @@ function Sidebar({
   open,
   onClose,
   countdown,
+  spots,
 }: {
   open: boolean;
   onClose: () => void;
   countdown: string;
+  spots: number;
 }) {
   return (
     <div
@@ -188,7 +191,7 @@ function Sidebar({
           Early Access
         </div>
         <div style={{ fontSize: 13, color: "rgba(255,255,255,0.8)", lineHeight: 1.5 }}>
-          <strong style={{ color: "#fff" }}>96 spots left</strong> — Lifetime pricing closes at 100 agents
+          <strong style={{ color: "#fff" }}>{spots} spots left</strong> — Lifetime pricing closes at 100 agents
         </div>
         <div style={{ marginTop: 8, fontSize: 13, fontFamily: "monospace", color: "#93c5fd", fontWeight: 600 }}>
           🕐 {countdown}
@@ -295,9 +298,11 @@ function Sidebar({
 function AnnouncementBar({
   countdown,
   onDismiss,
+  spots,
 }: {
   countdown: string;
   onDismiss: () => void;
+  spots: number;
 }) {
   return (
     <div
@@ -345,7 +350,7 @@ function AnnouncementBar({
         {/* Message */}
         <span style={{ color: "rgba(255,255,255,0.85)", textAlign: "center" }}>
           First 100 agents get lifetime pricing —{" "}
-          <strong style={{ color: "#fff" }}>96 spots left</strong>
+          <strong style={{ color: "#fff" }}>{spots} spots left</strong>
         </span>
 
         {/* Timer - hidden on very small screens via CSS class */}
@@ -427,6 +432,7 @@ export default function NavBar() {
   const [annVisible,   setAnnVisible]   = useState(true);
   const [sidebarOpen, setSidebarOpen]   = useState(false);
   const [scrolled,    setScrolled]      = useState(false);
+  const { spots } = useSpots();
   const countdown = useCountdown(23 * 3600 + 54 * 60 + 51);
 
   // Scroll detection for floating pill effect
@@ -454,7 +460,7 @@ export default function NavBar() {
   return (
     <>
       {/* Desktop size restoration */}
-      <style>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         @media (min-width: 1024px) {
           .nav-root-agt   { height: 68px !important; padding: 0 40px !important; gap: 24px !important; }
           .nav-brand-agt  { gap: 12px !important; }
@@ -462,7 +468,7 @@ export default function NavBar() {
           .nav-name-agt   { font-size: 20px !important; }
           .nav-badge-agt  { font-size: 11.5px !important; padding: 4px 12px !important; }
         }
-      `}</style>
+      ` }} />
 
       {/* Sidebar backdrop + panel */}
       {sidebarOpen && <SidebarBackdrop onClick={() => setSidebarOpen(false)} />}
@@ -470,6 +476,7 @@ export default function NavBar() {
         open={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
         countdown={countdown}
+        spots={spots}
       />
 
       {/* Announcement bar */}
@@ -477,6 +484,7 @@ export default function NavBar() {
         <AnnouncementBar
           countdown={countdown}
           onDismiss={() => setAnnVisible(false)}
+          spots={spots}
         />
       )}
 

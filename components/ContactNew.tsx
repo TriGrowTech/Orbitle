@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useSpots } from "@/context/SpotsContext";
 
 interface ContactNewProps {
   id?: string;
@@ -30,6 +31,7 @@ export default function ContactNew({
 }: ContactNewProps) {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { decrementSpots } = useSpots();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -42,6 +44,7 @@ export default function ContactNew({
     }).catch(() => {});
     setLoading(false);
     setSubmitted(true);
+    decrementSpots();
     onFormSubmit?.();
   }
 
@@ -219,7 +222,7 @@ export default function ContactNew({
                   <input
                     name="name"
                     required
-                    placeholder="Rahul Sharma"
+                    placeholder="Enter your full name"
                     style={inputStyle}
                   />
                 </label>
@@ -231,7 +234,7 @@ export default function ContactNew({
                     name="phone"
                     required
                     type="tel"
-                    placeholder="+91 98765 43210"
+                    placeholder="+91 00000 00000"
                     style={inputStyle}
                   />
                 </label>
@@ -247,7 +250,7 @@ export default function ContactNew({
                     name="email"
                     required
                     type="email"
-                    placeholder="rahul@horizontravel.com"
+                    placeholder="name@company.com"
                     style={inputStyle}
                   />
                 </label>
@@ -258,7 +261,7 @@ export default function ContactNew({
                   <input
                     name="business"
                     required
-                    placeholder="Horizon Travel Pvt. Ltd."
+                    placeholder="Your Company Name"
                     style={inputStyle}
                   />
                 </label>

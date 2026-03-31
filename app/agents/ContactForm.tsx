@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useSpots } from "@/context/SpotsContext";
 
 // ─────────────────────────────────────────────
 // TYPES
@@ -44,7 +45,7 @@ const inputStyle: React.CSSProperties = {
 // ─────────────────────────────────────────────
 
 /** Stacked avatar row + social proof text */
-function SocialProofStrip() {
+function SocialProofStrip({ spots }: { spots: number }) {
   return (
     <div
       style={{
@@ -84,7 +85,7 @@ function SocialProofStrip() {
           </div>
         ))}
       </div>
-      <span><strong>96 spots</strong> remaining at founding rate</span>
+      <span><strong>{spots} spots</strong> remaining at founding rate</span>
     </div>
   );
 }
@@ -134,6 +135,7 @@ function SuccessMessage({ compact }: { compact: boolean }) {
 export default function ContactForm({ compact = false, onSubmit }: { compact?: boolean; onSubmit?: () => void }) {
   const [submitted, setSubmitted] = useState(false);
   const [loading,   setLoading]   = useState(false);
+  const { spots, decrementSpots } = useSpots();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -158,6 +160,7 @@ export default function ContactForm({ compact = false, onSubmit }: { compact?: b
 
       if (response.ok && result.success) {
         setSubmitted(true);
+        decrementSpots();
       } else {
         alert('Failed to send. Please try again.');
       }
@@ -188,27 +191,27 @@ export default function ContactForm({ compact = false, onSubmit }: { compact?: b
         Fill in your details and we'll reach out within 24 hours with trial access and plan options.
       </p>
 
-      <SocialProofStrip />
+      <SocialProofStrip spots={spots} />
 
       <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
 
         {/* Row 1: Name + Phone */}
         <div className="form-grid-2">
           <Field label="Your Name">
-            <input name="name" required placeholder="Sara Mehta" style={inputStyle} />
+            <input name="name" required placeholder="Enter your full name" style={inputStyle} />
           </Field>
           <Field label="Phone">
-            <input name="phone" required type="tel" placeholder="+91 98765 43210" style={inputStyle} />
+            <input name="phone" required type="tel" placeholder="+91 00000 00000" style={inputStyle} />
           </Field>
         </div>
 
         {/* Row 2: Email + Business */}
         <div className="form-grid-2">
           <Field label="Email">
-            <input name="email" required type="email" placeholder="sara@saratravels.com" style={inputStyle} />
+            <input name="email" required type="email" placeholder="name@example.com" style={inputStyle} />
           </Field>
           <Field label="Business Name">
-            <input name="business" required placeholder="Sara Travels" style={inputStyle} />
+            <input name="business" required placeholder="Your Travel Agency Name" style={inputStyle} />
           </Field>
         </div>
 
@@ -222,7 +225,7 @@ export default function ContactForm({ compact = false, onSubmit }: { compact?: b
             </select>
           </Field>
           <Field label="Domain Name (if any)">
-            <input name="domain" placeholder="saratravels.com" style={inputStyle} />
+            <input name="domain" placeholder="example.com (optional)" style={inputStyle} />
           </Field>
         </div>
 
@@ -282,7 +285,7 @@ export default function ContactForm({ compact = false, onSubmit }: { compact?: b
             textAlign: "center",
           }}
         >
-          ⚡ 78 founding spots remaining — lifetime pricing closes at 100
+          ⚡ {spots} founding spots remaining — lifetime pricing closes at 100
         </div>
       </form>
     </div>

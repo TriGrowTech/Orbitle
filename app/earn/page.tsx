@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useSpots } from "@/context/SpotsContext";
 
 // ─────────────────────────────────────────────
 // DATA
@@ -74,6 +75,7 @@ const COMMISSION_TIERS = [
 function AffiliateSignupForm() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { decrementSpots } = useSpots();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -81,6 +83,7 @@ function AffiliateSignupForm() {
     await new Promise((r) => setTimeout(r, 900));
     setLoading(false);
     setSubmitted(true);
+    decrementSpots();
   }
 
   if (submitted) {
@@ -106,9 +109,9 @@ function AffiliateSignupForm() {
 
       <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
         {[
-          ["Your Name", "text", "Rahul Sharma"],
-          ["WhatsApp Number", "tel", "+91 98765 43210"],
-          ["Email Address", "email", "rahul@email.com"],
+          ["Your Name", "text", "Enter your full name"],
+          ["WhatsApp Number", "tel", "+91 00000 00000"],
+          ["Email Address", "email", "name@example.com"],
         ].map(([label, type, placeholder]) => (
           <label key={label as string} style={{ display: "flex", flexDirection: "column", gap: 5 }}>
             <span style={{ fontSize: 12, fontWeight: 700, color: "#0d1b2e" }}>{label as string}</span>
@@ -152,10 +155,9 @@ function AffiliateSignupForm() {
 export default function EarnPage() {
   return (
     <div style={{ fontFamily: "'Plus Jakarta Sans', -apple-system, sans-serif", background: "#f0f4fa", color: "#0d1b2e", minHeight: "100vh" }}>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+      <style dangerouslySetInnerHTML={{
+        __html: `
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        html { scroll-behavior: smooth; }
         @media (max-width: 900px) {
           .earn-main-grid  { grid-template-columns: 1fr !important; }
           .earn-step-grid  { grid-template-columns: 1fr !important; }
@@ -164,7 +166,7 @@ export default function EarnPage() {
         }
         .earn-tier-card:hover { transform: translateY(-3px); }
         .earn-cta-btn:hover { opacity: 0.9; }
-      `}</style>
+      ` }} />
 
       {/* Nav */}
       <nav style={{ background: "#fff", borderBottom: "1px solid #e2e8f0", padding: "0 24px", height: 60, display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 50 }}>
@@ -220,44 +222,44 @@ export default function EarnPage() {
           </div>
 
           <div className="earn-commission-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, marginBottom: 48 }}>
-          {COMMISSION_TIERS.map(({ label, planPrice, upfront, recurring, recurringNote, badge, isHighlighted }) => {
-            const bg = isHighlighted ? "#2563eb" : "#f0f4fa";
-            const border = isHighlighted ? "#1d4ed8" : "#e2e8f0";
-            const textColor = isHighlighted ? "#fff" : "#4b5e7a";
-            const mutedColor = isHighlighted ? "rgba(255,255,255,0.6)" : "#7a8fa8";
-            const dividerColor = isHighlighted ? "rgba(255,255,255,0.15)" : "#e2e8f0";
-            return (
-              <div
-                key={label}
-                className="earn-tier-card"
-                style={{ background: bg, border: `1.5px solid ${border}`, borderRadius: 20, padding: "28px 22px", transition: "transform 0.2s", position: "relative" }}
-              >
-                {badge && (
-                  <div style={{ position: "absolute", top: -12, left: "50%", transform: "translateX(-50%)", background: "#fff", color: "#2563eb", fontSize: 10, fontWeight: 700, padding: "4px 12px", borderRadius: 50, whiteSpace: "nowrap", border: "1.5px solid #dbeafe" }}>
-                    {badge}
-                  </div>
-                )}
-                <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: mutedColor, marginBottom: 10 }}>{label}</div>
-                <div style={{ fontSize: 13, color: mutedColor, marginBottom: 16 }}>Plan: {planPrice}</div>
+            {COMMISSION_TIERS.map(({ label, planPrice, upfront, recurring, recurringNote, badge, isHighlighted }) => {
+              const bg = isHighlighted ? "#2563eb" : "#f0f4fa";
+              const border = isHighlighted ? "#1d4ed8" : "#e2e8f0";
+              const textColor = isHighlighted ? "#fff" : "#4b5e7a";
+              const mutedColor = isHighlighted ? "rgba(255,255,255,0.6)" : "#7a8fa8";
+              const dividerColor = isHighlighted ? "rgba(255,255,255,0.15)" : "#e2e8f0";
+              return (
+                <div
+                  key={label}
+                  className="earn-tier-card"
+                  style={{ background: bg, border: `1.5px solid ${border}`, borderRadius: 20, padding: "28px 22px", transition: "transform 0.2s", position: "relative" }}
+                >
+                  {badge && (
+                    <div style={{ position: "absolute", top: -12, left: "50%", transform: "translateX(-50%)", background: "#fff", color: "#2563eb", fontSize: 10, fontWeight: 700, padding: "4px 12px", borderRadius: 50, whiteSpace: "nowrap", border: "1.5px solid #dbeafe" }}>
+                      {badge}
+                    </div>
+                  )}
+                  <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: mutedColor, marginBottom: 10 }}>{label}</div>
+                  <div style={{ fontSize: 13, color: mutedColor, marginBottom: 16 }}>Plan: {planPrice}</div>
 
-                <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", color: mutedColor, marginBottom: 4 }}>You earn</div>
-                <div style={{ fontSize: 30, fontWeight: 800, color: textColor, letterSpacing: "-0.02em", lineHeight: 1.1, marginBottom: 8 }}>{upfront}</div>
-                <div style={{ fontSize: 11, color: isHighlighted ? "rgba(255,255,255,0.6)" : "#16a34a", fontWeight: 600, marginBottom: 10 }}>upfront (on sign-up)</div>
+                  <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", color: mutedColor, marginBottom: 4 }}>You earn</div>
+                  <div style={{ fontSize: 30, fontWeight: 800, color: textColor, letterSpacing: "-0.02em", lineHeight: 1.1, marginBottom: 8 }}>{upfront}</div>
+                  <div style={{ fontSize: 11, color: isHighlighted ? "rgba(255,255,255,0.6)" : "#16a34a", fontWeight: 600, marginBottom: 10 }}>upfront (on sign-up)</div>
 
-                {recurring && (
-                  <div style={{ borderTop: `1px solid ${dividerColor}`, paddingTop: 12 }}>
-                    <div style={{ fontSize: 18, fontWeight: 800, color: isHighlighted ? "#93c5fd" : "#2563eb" }}>{recurring}</div>
-                    <div style={{ fontSize: 11, color: mutedColor, marginTop: 2 }}>{recurringNote}</div>
-                  </div>
-                )}
-                {!recurring && (
-                  <div style={{ borderTop: `1px solid ${dividerColor}`, paddingTop: 12, fontSize: 12, color: mutedColor }}>
-                    {recurringNote}
-                  </div>
-                )}
-              </div>
-            );
-          })}
+                  {recurring && (
+                    <div style={{ borderTop: `1px solid ${dividerColor}`, paddingTop: 12 }}>
+                      <div style={{ fontSize: 18, fontWeight: 800, color: isHighlighted ? "#93c5fd" : "#2563eb" }}>{recurring}</div>
+                      <div style={{ fontSize: 11, color: mutedColor, marginTop: 2 }}>{recurringNote}</div>
+                    </div>
+                  )}
+                  {!recurring && (
+                    <div style={{ borderTop: `1px solid ${dividerColor}`, paddingTop: 12, fontSize: 12, color: mutedColor }}>
+                      {recurringNote}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
 
           {/* Simple Example Box */}
@@ -391,7 +393,7 @@ export default function EarnPage() {
               <div style={{ marginTop: 40, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 12, padding: "16px 20px" }}>
                 <div style={{ fontSize: 12, fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8 }}>Questions?</div>
                 <p style={{ fontSize: 13, color: "rgba(255,255,255,0.5)", lineHeight: 1.6 }}>
-                  WhatsApp us at <span style={{ color: "#93c5fd", fontWeight: 600 }}>+91 9696197706</span> or email <span style={{ color: "#93c5fd", fontWeight: 600 }}>affiliate@trigrowtech.in</span>
+                  WhatsApp us at <span style={{ color: "#93c5fd", fontWeight: 600 }}>+91 9696658804</span> or email <span style={{ color: "#93c5fd", fontWeight: 600 }}>affiliate@trigrowtech.in</span>
                 </p>
               </div>
             </div>

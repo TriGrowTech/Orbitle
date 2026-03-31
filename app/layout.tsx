@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { LangProvider } from '@/lib/LangContext'
+import SmoothScroll from '@/components/SmoothScroll'
+import { SpotsProvider } from '@/context/SpotsContext'
 
 export const metadata: Metadata = {
   title: 'Orbitle — White-Label Travel Business Platform for Agents',
@@ -56,7 +58,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
-        <LangProvider>{children}</LangProvider>
+        <SmoothScroll>
+          <SpotsProvider>
+            <LangProvider>{children}</LangProvider>
+          </SpotsProvider>
+        </SmoothScroll>
       </body>
     </html>
   )
