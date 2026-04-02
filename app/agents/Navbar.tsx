@@ -15,7 +15,7 @@ interface NavLink {
 
 const NAV_LINKS: NavLink[] = [
   { label: "How It Works", href: "#how" },
-  { label: "Platform",     href: "#platform" },
+  
   { label: "Pricing",      href: "#pricing" },
   { label: "Contact",      href: "#get-started" },
 ];
@@ -54,7 +54,7 @@ function HamburgerButton({ onClick }: { onClick: () => void }) {
         height: 32,
         cursor: "pointer",
         padding: 0,
-        display: "none",           // shown via CSS media query
+        display: "none",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
@@ -270,7 +270,25 @@ function Sidebar({
       </nav>
 
       {/* CTA */}
-      <div style={{ padding: "16px 24px 28px", borderTop: "1px solid #e2e8f0" }}>
+      <div style={{ padding: "16px 24px 28px", borderTop: "1px solid #e2e8f0", display: "flex", flexDirection: "column", gap: 10 }}>
+        <Link
+          href="/login"
+          onClick={onClose}
+          style={{
+            display: "block",
+            width: "100%",
+            textAlign: "center",
+            background: "#f0f4fa",
+            color: "#0d1b2e",
+            fontSize: 15,
+            fontWeight: 700,
+            padding: "13px",
+            borderRadius: 50,
+            textDecoration: "none",
+          }}
+        >
+          Log In
+        </Link>
         <a
           href="#get-started"
           onClick={onClose}
@@ -314,12 +332,11 @@ function AnnouncementBar({
         overflow: "hidden",
       }}
     >
-      {/* Content row — wraps on mobile */}
       <div
         style={{
           maxWidth: 1280,
           margin: "0 auto",
-          padding: "10px 48px 10px 16px", // right padding leaves room for × button
+          padding: "10px 48px 10px 16px",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -329,7 +346,6 @@ function AnnouncementBar({
           fontWeight: 600,
         }}
       >
-        {/* Badge */}
         <span
           style={{
             background: "#2563eb",
@@ -347,13 +363,11 @@ function AnnouncementBar({
           Early Access
         </span>
 
-        {/* Message */}
         <span style={{ color: "rgba(255,255,255,0.85)", textAlign: "center" }}>
           First 100 agents get lifetime pricing —{" "}
           <strong style={{ color: "#fff" }}>{spots} spots left</strong>
         </span>
 
-        {/* Timer - hidden on very small screens via CSS class */}
         <div
           className="ann-bar-timer"
           style={{
@@ -375,7 +389,6 @@ function AnnouncementBar({
           🕐 {countdown}
         </div>
 
-        {/* CTA link */}
         <a
           href="#get-started"
           style={{
@@ -391,7 +404,6 @@ function AnnouncementBar({
         </a>
       </div>
 
-      {/* Dismiss — absolute so it doesn't affect flex layout */}
       <button
         onClick={onDismiss}
         aria-label="Dismiss announcement"
@@ -413,7 +425,6 @@ function AnnouncementBar({
         ×
       </button>
 
-      {/* Animated shimmer line at bottom */}
       <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 1, background: "rgba(37,99,235,0.3)", overflow: "hidden" }}>
         <div
           className="ann-shimmer"
@@ -429,20 +440,18 @@ function AnnouncementBar({
 // MAIN EXPORT
 // ─────────────────────────────────────────────
 export default function NavBar() {
-  const [annVisible,   setAnnVisible]   = useState(true);
-  const [sidebarOpen, setSidebarOpen]   = useState(false);
-  const [scrolled,    setScrolled]      = useState(false);
+  const [annVisible,  setAnnVisible]  = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [scrolled,    setScrolled]    = useState(false);
   const { spots } = useSpots();
   const countdown = useCountdown(23 * 3600 + 54 * 60 + 51);
 
-  // Scroll detection for floating pill effect
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close sidebar on Escape key
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === "Escape") setSidebarOpen(false);
@@ -451,7 +460,6 @@ export default function NavBar() {
     return () => window.removeEventListener("keydown", handler);
   }, []);
 
-  // Lock body scroll while sidebar is open
   useEffect(() => {
     document.body.style.overflow = sidebarOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
@@ -459,7 +467,6 @@ export default function NavBar() {
 
   return (
     <>
-      {/* Desktop size restoration */}
       <style dangerouslySetInnerHTML={{ __html: `
         @media (min-width: 1024px) {
           .nav-root-agt   { height: 68px !important; padding: 0 40px !important; gap: 24px !important; }
@@ -470,7 +477,6 @@ export default function NavBar() {
         }
       ` }} />
 
-      {/* Sidebar backdrop + panel */}
       {sidebarOpen && <SidebarBackdrop onClick={() => setSidebarOpen(false)} />}
       <Sidebar
         open={sidebarOpen}
@@ -479,7 +485,6 @@ export default function NavBar() {
         spots={spots}
       />
 
-      {/* Announcement bar */}
       {annVisible && (
         <AnnouncementBar
           countdown={countdown}
@@ -502,7 +507,6 @@ export default function NavBar() {
           justifyContent: "space-between",
           gap: 8,
           overflow: "hidden",
-          // Floating pill
           margin: scrolled ? "0 12px" : "0",
           borderRadius: scrolled ? 999 : 0,
           background: scrolled ? "rgba(255,255,255,0.92)" : "#fff",
@@ -514,7 +518,7 @@ export default function NavBar() {
           transition: "all 0.35s cubic-bezier(0.4,0,0.2,1)",
         }}
       >
-        {/* Brand — flex:1 + minWidth:0 lets it shrink on mobile */}
+        {/* Brand */}
         <div className="nav-brand-agt" style={{ display: "flex", alignItems: "center", gap: 8, flex: 1, minWidth: 0 }}>
           <div className="nav-logo-agt" style={{ width: 28, height: 28, flexShrink: 0 }}>
             <Image
@@ -555,7 +559,6 @@ export default function NavBar() {
 
         {/* Desktop nav links */}
         <div className="nav-links-desktop" style={{ display: "flex", alignItems: "center", gap: 32 }}>
-
           {NAV_LINKS.map(({ label, href }) => (
             <a
               key={label}
@@ -602,6 +605,30 @@ export default function NavBar() {
 
         {/* Desktop CTA */}
         <div className="nav-cta-desktop" style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <Link
+            href="/login"
+            style={{
+              fontSize: 14,
+              fontWeight: 600,
+              color: "#4b5e7a",
+              textDecoration: "none",
+              whiteSpace: "nowrap",
+              padding: "9px 18px",
+              borderRadius: 50,
+              border: "1px solid #e2e8f0",
+              transition: "all 0.2s",
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLAnchorElement).style.borderColor = "#2563eb";
+              (e.currentTarget as HTMLAnchorElement).style.color = "#2563eb";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLAnchorElement).style.borderColor = "#e2e8f0";
+              (e.currentTarget as HTMLAnchorElement).style.color = "#4b5e7a";
+            }}
+          >
+            Log In
+          </Link>
           <a
             href="#get-started"
             style={{
@@ -620,8 +647,9 @@ export default function NavBar() {
           </a>
         </div>
 
-        {/* Mobile: "Try for Free" + Hamburger — flexShrink:0 so it never gets squeezed */}
+        {/* Mobile: Log In + Try for Free + Hamburger */}
         <div className="nav-mobile-right" style={{ display: "none", alignItems: "center", gap: 6, flexShrink: 0 }}>
+          
           <a
             href="#get-started"
             style={{

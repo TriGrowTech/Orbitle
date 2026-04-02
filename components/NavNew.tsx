@@ -245,7 +245,25 @@ function Sidebar({
       </nav>
 
       {/* CTA */}
-      <div style={{ padding: "16px 24px 28px", borderTop: "1px solid #e2e8f0" }}>
+      <div style={{ padding: "16px 24px 28px", borderTop: "1px solid #e2e8f0", display: "flex", flexDirection: "column", gap: 10 }}>
+        <Link
+          href="/login"
+          onClick={onClose}
+          style={{
+            display: "block",
+            width: "100%",
+            textAlign: "center",
+            background: "#f0f4fa",
+            color: "#0d1b2e",
+            fontSize: 15,
+            fontWeight: 700,
+            padding: "13px",
+            borderRadius: 50,
+            textDecoration: "none",
+          }}
+        >
+          Log In
+        </Link>
         <a
           href="#contact"
           onClick={onClose}
@@ -262,7 +280,7 @@ function Sidebar({
             textDecoration: "none",
           }}
         >
-          Book a Demo →
+          Get Started →
         </a>
       </div>
     </div>
@@ -300,7 +318,6 @@ export default function NavNew() {
 
   return (
     <>
-      {/* Desktop size restoration via CSS — mobile stays compact, desktop gets full sizes */}
       <style dangerouslySetInnerHTML={{ __html: `
         @media (min-width: 1024px) {
           .nav-root-ops   { height: 64px !important; padding: 0 24px !important; gap: 16px !important; }
@@ -311,12 +328,8 @@ export default function NavNew() {
         }
       ` }} />
 
-      {/* Sidebar backdrop + panel */}
       {sidebarOpen && <SidebarBackdrop onClick={() => setSidebarOpen(false)} />}
-      <Sidebar
-        open={sidebarOpen}
-        onClose={() => setSidebarOpen(false)}
-      />
+      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* Sticky nav */}
       <nav
@@ -333,7 +346,6 @@ export default function NavNew() {
           gap: 8,
           fontFamily: "'Plus Jakarta Sans', sans-serif",
           overflow: "hidden",
-          // Floating pill styles
           margin: scrolled ? "0 12px" : "0",
           borderRadius: scrolled ? 999 : 0,
           background: scrolled ? "rgba(255,255,255,0.92)" : "#fff",
@@ -345,7 +357,7 @@ export default function NavNew() {
           transition: "all 0.35s cubic-bezier(0.4,0,0.2,1)",
         }}
       >
-        {/* Brand — flex:1 so it shrinks on mobile, minWidth:0 prevents overflow */}
+        {/* Brand */}
         <div className="nav-brand-ops" style={{ display: "flex", alignItems: "center", gap: 8, flex: 1, minWidth: 0 }}>
           <div className="nav-logo-ops" style={{ width: 28, height: 28, flexShrink: 0 }}>
             <Image
@@ -405,11 +417,7 @@ export default function NavNew() {
         </div>
 
         {/* Desktop Nav links */}
-        <div
-          className="hidden lg:flex"
-          style={{ alignItems: "center", gap: 28 }}
-        >
-
+        <div className="hidden lg:flex" style={{ alignItems: "center", gap: 28 }}>
           {NAV_LINKS.map(({ label, href }) => (
             <a
               key={label}
@@ -443,7 +451,6 @@ export default function NavNew() {
           </Link>
           <Link
             href="/earn"
-            className="nav-link"
             style={{
               fontSize: 14,
               fontWeight: 600,
@@ -461,6 +468,30 @@ export default function NavNew() {
 
         {/* Desktop CTA */}
         <div className="hidden lg:flex" style={{ alignItems: "center", gap: 12, flexShrink: 0 }}>
+          <Link
+            href="/login"
+            style={{
+              fontSize: 14,
+              fontWeight: 600,
+              color: "#4b5e7a",
+              textDecoration: "none",
+              whiteSpace: "nowrap",
+              padding: "9px 18px",
+              borderRadius: 50,
+              border: "1px solid #e2e8f0",
+              transition: "all 0.2s",
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLAnchorElement).style.borderColor = "#2563eb";
+              (e.currentTarget as HTMLAnchorElement).style.color = "#2563eb";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLAnchorElement).style.borderColor = "#e2e8f0";
+              (e.currentTarget as HTMLAnchorElement).style.color = "#4b5e7a";
+            }}
+          >
+            Log In
+          </Link>
           <a
             href="#contact"
             style={{
@@ -475,12 +506,13 @@ export default function NavNew() {
               display: "inline-block",
             }}
           >
-            Book a Demo →
+            Get Started →
           </a>
         </div>
 
-        {/* Mobile: "Try for Free" + Hamburger */}
+        {/* Mobile: Log In + Try for Free + Hamburger */}
         <div className="flex lg:hidden" style={{ alignItems: "center", gap: 6, flexShrink: 0 }}>
+          
           <a
             href="#contact"
             style={{
