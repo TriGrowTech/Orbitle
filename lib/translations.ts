@@ -27,12 +27,12 @@ export const translations = {
 
     // HERO
     hero: {
-      kicker: 'Waitlist Now Open',
+      kicker: 'Early Access Now Open',
       h1a: 'Bring Your Leads.',
       h1b: 'Add Your Agents.',
       h1c: 'We Handle the Rest.',
       desc: 'Orbitle is a complete travel business platform — marketplace, agent portal, admin panel, and lead management — deployed on your own branded domain in 5 minutes. You sell leads to your agents. We run the infrastructure.',
-      cta1: 'Join the Waitlist',
+      cta1: 'Start Your Free Trial',
       cta2: 'See How It Works',
       trust: '40+ travel operators already on the waitlist',
       adminTitle: 'YourBrand.com — Admin',

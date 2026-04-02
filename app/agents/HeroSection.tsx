@@ -247,7 +247,7 @@ export default function HeroSection() {
                 display: "inline-flex", alignItems: "center", gap: 8,
               }}
             >
-              Get My Website →
+              Start Your Free Trial →
             </a>
             <a
               href="#how"

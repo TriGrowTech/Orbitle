@@ -305,7 +305,7 @@ function Sidebar({
             textDecoration: "none",
           }}
         >
-          Get My Website →
+          Get Started →
         </a>
       </div>
     </div>
@@ -643,7 +643,7 @@ export default function NavBar() {
               display: "inline-block",
             }}
           >
-            Get My Website →
+            Get Started →
           </a>
         </div>
 
