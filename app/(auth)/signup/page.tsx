@@ -6,6 +6,7 @@ import {
   Input, PasswordInput, PrimaryButton, OutlineButton,
   Divider, AuthLink, BottomNav, ErrorBanner,
 } from "@/components/auth-ui";
+import api from "@/lib/axios";
 
 const H = "'Poppins', sans-serif";
 const B = "'Montserrat', sans-serif";
@@ -95,7 +96,7 @@ function RoleSelect({
 export default function SignupPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? "";
+  const dashboardUrl = process.env.NEXT_PUBLIC_DASHBOARD_URL ?? "";
 
   const fromParam = searchParams.get("from");
   const defaultRole: Role =
@@ -131,9 +132,8 @@ export default function SignupPage() {
   async function handleGoogle() {
     setGoogleLoading(true);
     try {
-      const res  = await fetch(`${apiUrl}/api/auth/google`);
-      const data = await res.json();
-      if (data.url) window.location.href = data.url;
+      const res = await api.get('/auth/google');
+      if (res.data.url) window.location.href = res.data.url;
       else setGlobalError("Could not initiate Google login.");
     } catch { setGlobalError("Google login failed."); }
     finally { setGoogleLoading(false); }
@@ -158,16 +158,29 @@ export default function SignupPage() {
 
     setLoading(true);
     try {
-      const res  = await fetch(`${apiUrl}/api/auth/register`, {
-        method: "POST", credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, role }),
-      });
-      const data = await res.json();
-      if (res.ok) router.push("/dashboard");
-      else setGlobalError(data.message ?? "Registration failed.");
-    } catch { setGlobalError("Something went wrong. Please try again."); }
-    finally { setLoading(false); }
+      // Map fullName to name and companyName to businessName for current backend
+      const signupData = {
+        name: form.fullName,
+        email: form.email,
+        password: form.password,
+        businessName: form.companyName,
+        phone: form.phone,
+        role: role
+      };
+
+      const res = await api.post('/auth/register', signupData);
+
+      if (res.data.success) {
+        // Redirct to dashboard on separate port/domain
+        window.location.href = `${dashboardUrl}/onboarding`;
+      } else {
+        setGlobalError(res.data.message ?? "Registration failed.");
+      }
+    } catch (err: any) {
+      setGlobalError(err.response?.data?.message || "Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   const inp = { padding: "7px 10px", fontSize: "12px" };

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import api from "@/lib/axios";
 import {
   AuthCard,
   AuthHeading,
@@ -24,12 +25,11 @@ function validateEmail(email: string) {
 
 export default function LoginPage() {
   const router = useRouter();
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? "";
+  const dashboardUrl = process.env.NEXT_PUBLIC_DASHBOARD_URL ?? "";
 
   const [mode, setMode] = useState<LoginMode>("password");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [otp, setOtp] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [globalError, setGlobalError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -44,9 +44,8 @@ export default function LoginPage() {
   async function handleGoogle() {
     setGoogleLoading(true);
     try {
-      const res = await fetch(`${apiUrl}/api/auth/google`, { method: "GET" });
-      const data = await res.json();
-      if (data.url) window.location.href = data.url;
+      const res = await api.get('/auth/google');
+      if (res.data.url) window.location.href = res.data.url;
       else setGlobalError("Could not initiate Google login.");
     } catch {
       setGlobalError("Google login failed. Please try again.");
@@ -66,17 +65,16 @@ export default function LoginPage() {
 
     setLoading(true);
     try {
-      const res = await fetch(`${apiUrl}/api/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ email, password }),
-      });
-      const data = await res.json();
-      if (res.ok) router.push("/dashboard");
-      else setGlobalError(data.message ?? "Invalid email or password.");
-    } catch {
-      setGlobalError("Something went wrong. Please try again.");
+      const res = await api.post('/auth/login', { email, password });
+
+      if (res.data.success) {
+        // Redirect to dashboard
+        window.location.href = `${dashboardUrl}/dashboard`;
+      } else {
+        setGlobalError(res.data.message ?? "Invalid email or password.");
+      }
+    } catch (err: any) {
+      setGlobalError(err.response?.data?.message || "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -90,18 +88,13 @@ export default function LoginPage() {
 
     setLoading(true);
     try {
-      const res = await fetch(`${apiUrl}/api/auth/send-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-      const data = await res.json();
-      if (res.ok) {
+      const res = await api.post('/auth/send-otp', { email });
+      if (res.data.success) {
         // Navigate to verify-otp page with email
         router.push(`/verify-otp?email=${encodeURIComponent(email)}`);
-      } else setGlobalError(data.message ?? "Failed to send OTP.");
-    } catch {
-      setGlobalError("Something went wrong. Please try again.");
+      } else setGlobalError(res.data.message ?? "Failed to send OTP.");
+    } catch (err: any) {
+      setGlobalError(err.response?.data?.message || "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
