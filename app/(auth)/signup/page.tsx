@@ -1,38 +1,8 @@
 "use client";
 
-// ─────────────────────────────────────────────────────────────────────────────
-// 🧪 MOCK API — DELETE THIS ENTIRE BLOCK WHEN INTEGRATING REAL BACKEND
-// Replace all `mockApi.*` calls below with your real `api.*` axios calls
-// ─────────────────────────────────────────────────────────────────────────────
-const MOCK_OTP = "123456"; // hardcoded OTP for testing
-
-const mockApi = {
-  sendEmailOtp: async (email: string) => {
-    await new Promise((r) => setTimeout(r, 1000));
-    console.log(`[MOCK] OTP sent to ${email} → use "${MOCK_OTP}"`);
-  },
-  verifyEmailOtp: async (email: string, otp: string) => {
-    await new Promise((r) => setTimeout(r, 800));
-    if (otp !== MOCK_OTP)
-      throw { response: { data: { message: "Invalid OTP. Use " + MOCK_OTP } } };
-    console.log(`[MOCK] Email ${email} verified`);
-  },
-  googleAuth: async () => {
-    await new Promise((r) => setTimeout(r, 600));
-    alert("[MOCK] Google OAuth flow — would redirect to Google");
-  },
-  register: async (data: Record<string, string>) => {
-    await new Promise((r) => setTimeout(r, 1200));
-    console.log("[MOCK] Register payload:", data);
-    return { data: { success: true } };
-  },
-};
-// ─────────────────────────────────────────────────────────────────────────────
-// END MOCK API
-// ─────────────────────────────────────────────────────────────────────────────
-
 import { useState, useEffect, useRef } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import api from "@/lib/axios";
 import {
   Input,
   PasswordInput,
@@ -43,6 +13,7 @@ import {
   BottomNav,
   ErrorBanner,
 } from "@/components/auth-ui";
+
 
 const H = "'Poppins', sans-serif";
 const B = "'Montserrat', sans-serif";
@@ -229,7 +200,7 @@ function EmailVerifyField({
     if (!email || !validateEmail(email)) return;
     setState("sending");
     try {
-      await mockApi.sendEmailOtp(email);
+      await api.post("/auth/send-signup-otp", { email });
       setState("otp-sent");
       setOtp("");
       setOtpError("");
@@ -246,7 +217,7 @@ function EmailVerifyField({
     setOtpError("");
     setState("verifying");
     try {
-      await mockApi.verifyEmailOtp(email, otp);
+      await api.post("/auth/verify-signup-otp", { email, otp });
       setState("verified");
       clearInterval(timerRef.current!);
       setCooldown(0);
@@ -517,6 +488,7 @@ function EmailVerifyField({
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 export default function SignupPage() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const dashboardUrl = process.env.NEXT_PUBLIC_DASHBOARD_URL ?? "";
 
@@ -562,10 +534,10 @@ export default function SignupPage() {
   async function handleGoogle() {
     setGoogleLoading(true);
     try {
-      await mockApi.googleAuth();
+      // Google OAuth — redirect to backend Google auth endpoint
+      window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/google`;
     } catch {
       setGlobalError("Google login failed.");
-    } finally {
       setGoogleLoading(false);
     }
   }
@@ -592,7 +564,7 @@ export default function SignupPage() {
 
     setLoading(true);
     try {
-      const res = await mockApi.register({
+      const res = await api.post("/auth/register", {
         name: form.fullName,
         email: form.email,
         password: form.password,
@@ -601,11 +573,7 @@ export default function SignupPage() {
         role,
       });
       if (res.data.success) {
-        alert(
-          "[MOCK] Registration successful! Would redirect to: " +
-            (dashboardUrl || "/dashboard") +
-            "/onboarding",
-        );
+        router.push((dashboardUrl || "") + "/onboarding");
       }
     } catch (err: any) {
       setGlobalError(
@@ -707,36 +675,6 @@ export default function SignupPage() {
           }
         }
       `}</style>
-
-      {/* 🧪 DEV HINT — remove in production */}
-      {process.env.NODE_ENV === "development" && (
-        <div
-          style={{
-            position: "fixed",
-            bottom: 16,
-            right: 16,
-            zIndex: 9999,
-            background: "#1e293b",
-            color: "#94a3b8",
-            borderRadius: "10px",
-            padding: "10px 14px",
-            fontSize: "11px",
-            fontFamily: B,
-            boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
-            maxWidth: 220,
-          }}
-        >
-          <div style={{ color: "#f59e0b", fontWeight: 700, marginBottom: 4 }}>
-            🧪 Mock Mode
-          </div>
-          <div>
-            OTP code: <strong style={{ color: "#fff" }}>{MOCK_OTP}</strong>
-          </div>
-          <div style={{ marginTop: 2, color: "#64748b" }}>
-            Check console for logs
-          </div>
-        </div>
-      )}
 
       <div
         className={`signup-card${mounted ? " mounted" : ""}`}

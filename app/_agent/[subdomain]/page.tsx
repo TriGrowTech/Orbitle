@@ -1,16 +1,37 @@
-export default function AgentWebsite({ params }: { params: { subdomain: string } }) {
+import AgentMarketplaceClient from './AgentMarketplaceClient';
+
+// Server component — fetch data server-side for SEO
+async function getAgentData(subdomain: string) {
+  try {
+    const res = await fetch(
+      `http://localhost:5000/api/public/agent/${subdomain}`,
+      { cache: 'no-store' }
+    );
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
+export async function generateMetadata({ params }: { params: { subdomain: string } }) {
+  const data = await getAgentData(params.subdomain);
+  if (!data?.success) {
+    return { title: 'Agent Not Found — Orbitle' };
+  }
+  const agent = data.agent;
+  return {
+    title: `${agent.businessName || agent.name} — Travel Packages`,
+    description: agent.tagline || `Explore travel packages by ${agent.businessName || agent.name}`,
+  };
+}
+
+export default async function AgentMarketplacePage({ params }: { params: { subdomain: string } }) {
+  const data = await getAgentData(params.subdomain);
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 flex-col">
-      <div className="bg-white p-10 rounded-2xl shadow-xl max-w-lg w-full text-center border top-4 border-gray-200">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">🎈 It Works!</h1>
-        <p className="text-gray-600 mb-6">
-          You are viewing the agent website for:<br />
-          <strong className="text-blue-600 text-xl block mt-2">{params.subdomain}.localhost:3000</strong>
-        </p>
-        <p className="text-sm text-gray-500">
-          In the future, this page will fetch the details for <b>{params.subdomain}</b> from the backend API and render their beautiful customized travel website here.
-        </p>
-      </div>
-    </div>
+    <AgentMarketplaceClient
+      subdomain={params.subdomain}
+      initialData={data}
+    />
   );
 }
