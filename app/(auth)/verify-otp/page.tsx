@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import api from "@/lib/axios";
 import {
   AuthCard,
   AuthHeading,
@@ -16,7 +17,7 @@ export default function VerifyOtpPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get("email") ?? "";
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? "";
+  const dashboardUrl = process.env.NEXT_PUBLIC_DASHBOARD_URL ?? "";
 
   const [digits, setDigits] = useState<string[]>(Array(OTP_LENGTH).fill(""));
   const [globalError, setGlobalError] = useState("");
@@ -84,17 +85,14 @@ export default function VerifyOtpPage() {
     setGlobalError("");
     setLoading(true);
     try {
-      const res = await fetch(`${apiUrl}/api/auth/verify-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ email, otp: code }),
-      });
-      const data = await res.json();
-      if (res.ok) router.push("/dashboard");
-      else setGlobalError(data.message ?? "Invalid or expired OTP.");
-    } catch {
-      setGlobalError("Something went wrong. Please try again.");
+      const res = await api.post("/auth/verify-signup-otp", { email, otp: code });
+      if (res.data.success) {
+        window.location.href = `${dashboardUrl}/dashboard`;
+      } else {
+        setGlobalError(res.data.message ?? "Invalid or expired OTP.");
+      }
+    } catch (err: any) {
+      setGlobalError(err.response?.data?.message ?? "Invalid or expired OTP.");
     } finally {
       setLoading(false);
     }
@@ -105,21 +103,16 @@ export default function VerifyOtpPage() {
     setResendLoading(true);
     setGlobalError("");
     try {
-      const res = await fetch(`${apiUrl}/api/auth/send-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-      if (res.ok) {
+      const res = await api.post("/auth/send-signup-otp", { email });
+      if (res.data.success) {
         setDigits(Array(OTP_LENGTH).fill(""));
         inputRefs.current[0]?.focus();
         startCooldown();
       } else {
-        const data = await res.json();
-        setGlobalError(data.message ?? "Failed to resend OTP.");
+        setGlobalError(res.data.message ?? "Failed to resend OTP.");
       }
-    } catch {
-      setGlobalError("Something went wrong. Please try again.");
+    } catch (err: any) {
+      setGlobalError(err.response?.data?.message ?? "Failed to resend OTP.");
     } finally {
       setResendLoading(false);
     }

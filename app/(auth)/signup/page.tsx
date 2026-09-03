@@ -573,7 +573,7 @@ export default function SignupPage() {
         role,
       });
       if (res.data.success) {
-        router.push((dashboardUrl || "") + "/onboarding");
+        window.location.href = `${dashboardUrl}/onboarding`;
       }
     } catch (err: any) {
       setGlobalError(

@@ -161,6 +161,7 @@ export default function ContactForm({ compact = false, onSubmit }: { compact?: b
       if (response.ok && result.success) {
         setSubmitted(true);
         decrementSpots();
+        onSubmit?.();
       } else {
         alert('Failed to send. Please try again.');
       }

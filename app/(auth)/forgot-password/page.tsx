@@ -1,45 +1,8 @@
 "use client";
 
-/* ──────────────────────────────────────────────────────────────
-   TEMP UI MOCK — delete when backend is ready
-   OTP to use: 123456
-────────────────────────────────────────────────────────────── */
-
-const USE_TEMP_MOCK = true;
-
-// store mock in global so we can patch later
-if (USE_TEMP_MOCK) {
-  const wait = (ms: number) => new Promise(res => setTimeout(res, ms));
-
-  // @ts-ignore
-  globalThis.__TEMP_AUTH_PATCH__ = {
-    sendOtp: async (email: string) => {
-      console.log("🟡 MOCK sendOtp →", email);
-      await wait(900);
-    },
-
-    verifyOtp: async (_email: string, otp: string) => {
-      console.log("🟡 MOCK verifyOtp →", otp);
-      await wait(900);
-
-      if (otp !== "123456") {
-        throw { message: "Invalid OTP. Use 123456" };
-      }
-
-      return { resetToken: "mock-reset-token" };
-    },
-
-    resetPassword: async (_token: string, password: string) => {
-      console.log("🟡 MOCK resetPassword →", password);
-      await wait(1000);
-    },
-  };
-}
-
-/* ────────────────────────────────────────────────────────────── */
-
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import api from "@/lib/axios";
 import {
   Input, PasswordInput, PrimaryButton, AuthLink, ErrorBanner,
 } from "@/components/auth-ui";
@@ -47,55 +10,8 @@ import {
 const H = "'Poppins', sans-serif";
 const B = "'Montserrat', sans-serif";
 const OTP_LENGTH = 6;
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
 
 const validateEmail = (e: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
-
-// ─── Real API — active when mock block above is deleted ───────────────────────
-const api = {
-  sendOtp: async (email: string): Promise<void> => {
-    const res = await fetch(`${API_URL}/api/auth/forgot-password/send-otp`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
-    });
-    if (!res.ok) {
-      const data = await res.json();
-      throw { message: data.message ?? "Failed to send OTP." };
-    }
-  },
-  verifyOtp: async (email: string, otp: string): Promise<{ resetToken: string }> => {
-    const res = await fetch(`${API_URL}/api/auth/forgot-password/verify-otp`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, otp }),
-    });
-    const data = await res.json();
-    if (!res.ok) throw { message: data.message ?? "Invalid or expired OTP." };
-    return { resetToken: data.resetToken };
-  },
-  resetPassword: async (resetToken: string, password: string): Promise<void> => {
-    const res = await fetch(`${API_URL}/api/auth/forgot-password/reset`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ resetToken, password }),
-    });
-    if (!res.ok) {
-      const data = await res.json();
-      throw { message: data.message ?? "Failed to reset password." };
-    }
-  },
-};
-
-// ─── Patch API with mock in development (delete when connecting to backend) ─────────────────────────
-if (typeof window !== "undefined") {
-  // @ts-ignore
-  const mock = globalThis.__TEMP_AUTH_PATCH__;
-  if (mock) {
-    Object.assign(api, mock);
-    console.log("🟢 Using TEMP ForgotPassword mock API");
-  }
-}
 
 // ─── Shared label + error wrapper ────────────────────────────────────────────
 function F({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
@@ -114,8 +30,8 @@ function F({ label, error, children }: { label: string; error?: string; children
 }
 
 // ─── Step indicator ───────────────────────────────────────────────────────────
-function Steps({ current }: { current: 1 | 2 | 3 }) {
-  const steps = ["Email", "Verify OTP", "New Password"];
+function Steps({ current }: { current: 1 | 2 }) {
+  const steps = ["Email", "Reset Password"];
   return (
     <div style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
       {steps.map((label, i) => {
@@ -176,10 +92,10 @@ function StepEmail({ onSent }: { onSent: (email: string) => void }) {
     if (!validateEmail(email)) return setError("Enter a valid email address");
     setLoading(true);
     try {
-      await api.sendOtp(email);
+      await api.post("/auth/forgotpassword", { email });
       onSent(email);
     } catch (err: any) {
-      setGlobalError(err?.message ?? "Failed to send OTP. Try again.");
+      setGlobalError(err.response?.data?.message ?? "Failed to send OTP. Try again.");
     } finally {
       setLoading(false);
     }
@@ -218,9 +134,12 @@ function StepEmail({ onSent }: { onSent: (email: string) => void }) {
   );
 }
 
-// ─── Step 2: Verify OTP ───────────────────────────────────────────────────────
-function StepVerifyOtp({ email, onVerified }: { email: string; onVerified: (token: string) => void }) {
+// ─── Step 2: Reset Password (OTP + Password) ──────────────────────────────────
+function StepResetPassword({ email, onSuccess }: { email: string; onSuccess: () => void }) {
   const [digits, setDigits] = useState<string[]>(Array(OTP_LENGTH).fill(""));
+  const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [globalError, setGlobalError] = useState("");
   const [loading, setLoading] = useState(false);
   const [resendLoading, setResendLoading] = useState(false);
@@ -269,16 +188,37 @@ function StepVerifyOtp({ email, onVerified }: { email: string; onVerified: (toke
     inputRefs.current[nextEmpty === -1 ? OTP_LENGTH - 1 : nextEmpty]?.focus();
   }
 
-  async function handleVerify() {
-    const code = digits.join("");
-    if (code.length < OTP_LENGTH) return setGlobalError("Enter the complete 6-digit code");
+  function strength() {
+    let s = 0;
+    if (password.length >= 8) s++;
+    if (password.length >= 12) s++;
+    if (/[A-Z]/.test(password) && /[a-z]/.test(password)) s++;
+    if (/[0-9]/.test(password)) s++;
+    if (/[^A-Za-z0-9]/.test(password)) s++;
+    return Math.min(s, 4);
+  }
+  const strengthColors = ["", "#ef4444", "#f59e0b", "#3b82f6", "#22c55e"];
+  const strengthLabels = ["", "Weak", "Fair", "Good", "Strong"];
+  const s = strength();
+
+  async function handleReset() {
+    setErrors({});
     setGlobalError("");
+    const otp = digits.join("");
+    const e: Record<string, string> = {};
+    if (otp.length < OTP_LENGTH) e.otp = "Verification code is incomplete";
+    if (!password) e.password = "Required";
+    else if (password.length < 8) e.password = "Min. 8 characters";
+    if (!confirm) e.confirm = "Required";
+    else if (password !== confirm) e.confirm = "Passwords don't match";
+    if (Object.keys(e).length) return setErrors(e);
+
     setLoading(true);
     try {
-      const data = await api.verifyOtp(email, code);
-      onVerified(data.resetToken);
+      await api.put("/auth/resetpassword", { email, otp, password });
+      onSuccess();
     } catch (err: any) {
-      setGlobalError(err?.message ?? "Invalid or expired OTP.");
+      setGlobalError(err.response?.data?.message ?? "Failed to reset password. Check your OTP.");
     } finally {
       setLoading(false);
     }
@@ -286,63 +226,62 @@ function StepVerifyOtp({ email, onVerified }: { email: string; onVerified: (toke
 
   async function handleResend() {
     if (cooldown > 0) return;
-    setResendLoading(true); setGlobalError("");
+    setResendLoading(true);
+    setGlobalError("");
     try {
-      await api.sendOtp(email);
+      await api.post("/auth/forgotpassword", { email });
       setDigits(Array(OTP_LENGTH).fill(""));
       inputRefs.current[0]?.focus();
       startCooldown();
     } catch (err: any) {
-      setGlobalError(err?.message ?? "Failed to resend OTP.");
+      setGlobalError(err.response?.data?.message ?? "Failed to resend OTP.");
     } finally {
       setResendLoading(false);
     }
   }
 
-  const isComplete = digits.join("").length === OTP_LENGTH;
+  const isComplete = digits.join("").length === OTP_LENGTH && password.length >= 8 && password === confirm;
 
   return (
     <div>
       <div style={{ marginBottom: "16px" }}>
         <h1 style={{ fontSize: "18px", fontWeight: 700, color: "#0d1b2e", margin: "0 0 3px", fontFamily: H, letterSpacing: "-0.3px" }}>
-          Enter verification code
+          Reset password
         </h1>
         <p style={{ fontSize: "11px", color: "#64748b", margin: 0, fontFamily: B, lineHeight: 1.5 }}>
-          We sent a 6-digit code to <strong style={{ color: "#0d1b2e" }}>{email}</strong>
+          Enter the 6-digit code sent to <strong style={{ color: "#0d1b2e" }}>{email}</strong> and choose a new password.
         </p>
       </div>
 
       {globalError && <ErrorBanner message={globalError} />}
 
-      <div style={{ display: "flex", gap: "8px", justifyContent: "center", marginBottom: "16px" }} onPaste={handlePaste}>
-        {digits.map((digit, i) => (
-          <input
-            key={i}
-            ref={(el) => { inputRefs.current[i] = el; }}
-            type="text" inputMode="numeric" pattern="[0-9]*" maxLength={1}
-            value={digit}
-            onChange={(e) => handleChange(i, e.target.value)}
-            onKeyDown={(e) => handleKeyDown(i, e)}
-            style={{
-              width: "42px", height: "48px", textAlign: "center",
-              fontSize: "20px", fontWeight: 700, color: "#0d1b2e",
-              background: digit ? "#eff6ff" : "#f8fafc",
-              border: `2px solid ${digit ? "#2563eb" : "#e2e8f0"}`,
-              borderRadius: "10px", outline: "none",
-              transition: "border-color 0.15s, background 0.15s, box-shadow 0.15s",
-              fontFamily: "'DM Mono', 'Courier New', monospace", cursor: "text",
-            }}
-            onFocus={(e) => { e.currentTarget.style.borderColor = "#2563eb"; e.currentTarget.style.boxShadow = "0 0 0 3px rgba(37,99,235,0.15)"; }}
-            onBlur={(e) => { e.currentTarget.style.borderColor = digit ? "#2563eb" : "#e2e8f0"; e.currentTarget.style.boxShadow = "none"; }}
-          />
-        ))}
-      </div>
+      <F label="Verification code" error={errors.otp}>
+        <div style={{ display: "flex", gap: "8px", justifyContent: "center", marginBottom: "6px" }} onPaste={handlePaste}>
+          {digits.map((digit, i) => (
+            <input
+              key={i}
+              ref={(el) => { inputRefs.current[i] = el; }}
+              type="text" inputMode="numeric" pattern="[0-9]*" maxLength={1}
+              value={digit}
+              onChange={(e) => handleChange(i, e.target.value)}
+              onKeyDown={(e) => handleKeyDown(i, e)}
+              style={{
+                width: "42px", height: "48px", textAlign: "center",
+                fontSize: "20px", fontWeight: 700, color: "#0d1b2e",
+                background: digit ? "#eff6ff" : "#f8fafc",
+                border: `2px solid ${digit ? "#2563eb" : "#e2e8f0"}`,
+                borderRadius: "10px", outline: "none",
+                transition: "border-color 0.15s, background 0.15s, box-shadow 0.15s",
+                fontFamily: "'DM Mono', 'Courier New', monospace", cursor: "text",
+              }}
+              onFocus={(e) => { e.currentTarget.style.borderColor = "#2563eb"; e.currentTarget.style.boxShadow = "0 0 0 3px rgba(37,99,235,0.15)"; }}
+              onBlur={(e) => { e.currentTarget.style.borderColor = digit ? "#2563eb" : "#e2e8f0"; e.currentTarget.style.boxShadow = "none"; }}
+            />
+          ))}
+        </div>
+      </F>
 
-      <PrimaryButton loading={loading} disabled={!isComplete} onClick={handleVerify}>
-        Verify OTP
-      </PrimaryButton>
-
-      <div style={{ textAlign: "center", marginTop: "12px" }}>
+      <div style={{ textAlign: "center", marginBottom: "16px" }}>
         {cooldown > 0 ? (
           <p style={{ fontSize: "11px", color: "#94a3b8", margin: 0, fontFamily: B }}>
             Resend code in{" "}
@@ -359,63 +298,6 @@ function StepVerifyOtp({ email, onVerified }: { email: string; onVerified: (toke
           </button>
         )}
       </div>
-    </div>
-  );
-}
-
-// ─── Step 3: New Password ─────────────────────────────────────────────────────
-function StepNewPassword({ resetToken, onSuccess }: { resetToken: string; onSuccess: () => void }) {
-  const [password, setPassword] = useState("");
-  const [confirm, setConfirm] = useState("");
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [globalError, setGlobalError] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  function strength() {
-    let s = 0;
-    if (password.length >= 8) s++;
-    if (password.length >= 12) s++;
-    if (/[A-Z]/.test(password) && /[a-z]/.test(password)) s++;
-    if (/[0-9]/.test(password)) s++;
-    if (/[^A-Za-z0-9]/.test(password)) s++;
-    return Math.min(s, 4);
-  }
-  const strengthColors = ["", "#ef4444", "#f59e0b", "#3b82f6", "#22c55e"];
-  const strengthLabels = ["", "Weak", "Fair", "Good", "Strong"];
-  const s = strength();
-
-  async function handleReset() {
-    setErrors({}); setGlobalError("");
-    const e: Record<string, string> = {};
-    if (!password) e.password = "Required";
-    else if (password.length < 8) e.password = "Min. 8 characters";
-    if (!confirm) e.confirm = "Required";
-    else if (password !== confirm) e.confirm = "Passwords don't match";
-    if (Object.keys(e).length) return setErrors(e);
-
-    setLoading(true);
-    try {
-      await api.resetPassword(resetToken, password);
-      onSuccess();
-    } catch (err: any) {
-      setGlobalError(err?.message ?? "Failed to reset password.");
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  return (
-    <div>
-      <div style={{ marginBottom: "16px" }}>
-        <h1 style={{ fontSize: "18px", fontWeight: 700, color: "#0d1b2e", margin: "0 0 3px", fontFamily: H, letterSpacing: "-0.3px" }}>
-          Set new password
-        </h1>
-        <p style={{ fontSize: "11px", color: "#64748b", margin: 0, fontFamily: B, lineHeight: 1.5 }}>
-          Choose a strong password you haven't used before.
-        </p>
-      </div>
-
-      {globalError && <ErrorBanner message={globalError} />}
 
       <F label="New password" error={errors.password}>
         <PasswordInput placeholder="Min. 8 characters" value={password}
@@ -442,7 +324,7 @@ function StepNewPassword({ resetToken, onSuccess }: { resetToken: string; onSucc
           onChange={(e) => setConfirm(e.target.value)} hasError={!!errors.confirm} autoComplete="new-password" />
       </F>
 
-      <PrimaryButton loading={loading} onClick={handleReset}>
+      <PrimaryButton loading={loading} disabled={!isComplete} onClick={handleReset}>
         Reset password
       </PrimaryButton>
     </div>
@@ -479,40 +361,23 @@ function StepSuccess() {
 
 // ─── Main page ────────────────────────────────────────────────────────────────
 export default function ForgotPasswordPage() {
-  const [step, setStep]             = useState<1 | 2 | 3 | 4>(1);
-  const [email, setEmail]           = useState("");
-  const [resetToken, setResetToken] = useState("");
+  const [step, setStep]   = useState<1 | 2 | 3>(1);
+  const [email, setEmail] = useState("");
 
   return (
-    <>
-      {process.env.NODE_ENV === "development" && (
-        <div style={{
-          position: "fixed", bottom: 16, right: 16, zIndex: 9999,
-          background: "#1e293b", color: "#94a3b8", borderRadius: "10px",
-          padding: "10px 14px", fontSize: "11px", fontFamily: B,
-          boxShadow: "0 4px 20px rgba(0,0,0,0.3)", maxWidth: 220,
-        }}>
-          <div style={{ color: "#f59e0b", fontWeight: 700, marginBottom: 4 }}>🧪 Mock Mode</div>
-          <div>OTP code: <strong style={{ color: "#fff" }}>123456</strong></div>
-          <div style={{ marginTop: 2, color: "#64748b" }}>Check console for logs</div>
-        </div>
-      )}
+    <div style={{
+      width: "100%", maxWidth: "400px",
+      background: "#fff", borderRadius: "16px",
+      boxShadow: "0 2px 24px rgba(13,27,46,0.10)",
+      padding: "22px 24px",
+      border: "1px solid rgba(37,99,235,0.08)",
+      fontFamily: B,
+    }}>
+      {step < 3 && <Steps current={step as 1 | 2} />}
 
-      <div style={{
-        width: "100%", maxWidth: "400px",
-        background: "#fff", borderRadius: "16px",
-        boxShadow: "0 2px 24px rgba(13,27,46,0.10)",
-        padding: "22px 24px",
-        border: "1px solid rgba(37,99,235,0.08)",
-        fontFamily: B,
-      }}>
-        {step < 4 && <Steps current={step as 1 | 2 | 3} />}
-
-        {step === 1 && <StepEmail onSent={(e) => { setEmail(e); setStep(2); }} />}
-        {step === 2 && <StepVerifyOtp email={email} onVerified={(token) => { setResetToken(token); setStep(3); }} />}
-        {step === 3 && <StepNewPassword resetToken={resetToken} onSuccess={() => setStep(4)} />}
-        {step === 4 && <StepSuccess />}
-      </div>
-    </>
+      {step === 1 && <StepEmail onSent={(e) => { setEmail(e); setStep(2); }} />}
+      {step === 2 && <StepResetPassword email={email} onSuccess={() => setStep(3)} />}
+      {step === 3 && <StepSuccess />}
+    </div>
   );
 }
