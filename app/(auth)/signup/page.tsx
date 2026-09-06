@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { Suspense, useState, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import api from "@/lib/axios";
 import {
@@ -487,7 +487,7 @@ function EmailVerifyField({
 }
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
-export default function SignupPage() {
+function SignupContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const dashboardUrl = process.env.NEXT_PUBLIC_DASHBOARD_URL ?? "";
@@ -917,5 +917,13 @@ export default function SignupPage() {
         </div>
       </div>
     </>
+  );
+}
+
+export default function SignupPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SignupContent />
+    </Suspense>
   );
 }
